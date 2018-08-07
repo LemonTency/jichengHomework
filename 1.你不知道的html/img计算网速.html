@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>利用图片计算网速</title>
+</head>
+<body>
+<!-- 	<img crossorigin = "anonymous" src="https://webmap1.bdimg.com/mobile/simple/static/index/images/index-nb-round_3e43e00.png"/> -->
+    <script>
+    	var s = Date.now();
+    	console.log(s);
+    	var image = new Image();
+    	image.crossorigin = 'anonymous';
+    	image.src = "https://webmap1.bdimg.com/mobile/simple/static/index/images/index-nb-round_3e43e00.png";
+    	image.onload = function(){
+    		var e = Date.now();
+    		console.log(e);
+    		var w = 13.9/(e-s); //kb/ms  加载图片的大小/加载的时间
+    		console.log(w);
+    	}
+
+    	// $(image).onclick = function(){
+    	// 	var image = new Image();
+    	// 	image.crossorigin = 'anonymous';
+    	// 	image.src = "....";//将一些采集到的数据发送出去
+    	// }
+    	
+
+    </script>
+</body>
+</html>
