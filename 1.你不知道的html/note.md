@@ -15,17 +15,17 @@ use-credentials ：对此元素的CORS请求将设置凭证标志; 这意味着�
 代码：
         
         <script>
-        var s = Date.now();
-        console.log(s);
-        var image = new Image();
-        image.crossorigin = 'anonymous';
-        image.src = "https://webmap1.bdimg.com/mobile/simple/static/index/images/index-nb-round_3e43e00.png";
-        image.onload = function(){
-            var e = Date.now();
-            console.log(e);
-            var w = 13.9/(e-s); //kb/ms  加载图片的大小/加载的时间
-            console.log(w);
-        }
+      var s = Date.now();
+      console.log(s);
+      var image = new Image();
+      image.crossorigin = 'anonymous';
+      image.src = "https://webmap1.bdimg.com/mobile/simple/static/index/images/index-nb-round_3e43e00.png";
+      image.onload = function(){
+        var e = Date.now();
+        console.log(e);
+        var w = 13.9/(e-s); //kb/ms  加载图片的大小/加载的时间
+        console.log(w);
+      }
     </script>
 图片是随便去百度地图那里找的
 ![image.png](https://upload-images.jianshu.io/upload_images/7728915-1c856299343c4c2e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
@@ -148,6 +148,7 @@ content: 插入生成内容。
 
 ####利用iframe给本地localStorage扩容
 关于iframe
+https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/iframe
 内联的框架，就像 [`<frame>`](https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/frame "<frame> 是 HTML 元素，它定义了一个特定区域，另一个 HTML 文档可以在里面展示。帧应该在 <frameset> 中使用。") 元素一样，会加入 `[window.frames](https://developer.mozilla.org/en-US/docs/DOM/window.frames "DOM/window.frames")` 伪数组（类数组的对象）中。
 
 通过contentWindow属性，脚本可以访问iframe元素所包含的HTML页面的window对象。contentDocument属性则引用了iframe中的文档元素（等同于使用contentWindow.document），但IE8-不支持。
@@ -156,27 +157,93 @@ content: 插入生成内容。
 
 脚本试图访问的框架内容必须遵守[同源策略](https://developer.mozilla.org/en-US/docs/Same_origin_policy_for_JavaScript "/en-US/docs/Same_origin_policy_for_JavaScript")，并且无法访问非同源的window对象的几乎所有属性。同源策略同样适用于子窗体访问父窗体的window对象。跨域通信可以通过[window.postMessage](https://developer.mozilla.org/zh-CN/docs/Web/API/Window/postMessage "/zh-CN/docs/Web/API/Window/postMessage")来实现
 
-思路大概是这样的：
-1. 在【A域】下引入【B域】，【A域】空间足够时，读写由【A域】来完成，数据存在【A域】下；当【A域】空间不够时，读写由【B域】来完成，数据存在【B域】下
+阮一峰老师的http://www.ruanyifeng.com/blog/2016/04/same-origin-policy.html这一篇博文也讲过，iframe可以通过postMessage来跨域，下面的是简要的分析（iframe,window.open同理）
 
-2.【A域】空间不够需要在【B域】读写时，通过postMessage 向【B域】发送跨域消息，【B域】监听跨域消息，在接到指定的消息时进行读写操作
+假设父窗口是www.aaa.com
+子窗口是www.bbb.com
+> ```
+> var popup = window.open('http://bbb.com', 'title');
+> popup.postMessage('Hello World!', 'http://bbb.com');
+> 
+> ```
+上面的代码此时就是父窗口对子窗口发送信息了
+相同的，子窗口也能对父窗口发送信息
+>```
+>window.opener.postMessage('Nice to see you', 'http://aaa.com');
+>```
+两个窗口都能对通过message事件监听对方的消息
 
-3.【B域】接到跨域消息时，如果是写入删除可以不做什么，如果是读取，就要先读取本域本地数据通过postMessage向父页面发送消息
+        window.addEventListener('message', function(e) {
+          console.log(e.data);
+        },false);
+message中的event对象有以下几种属性
+* event.source：发送消息的窗口
+* event.origin: 消息发向的网址
+* event.data: 消息内容
 
-4.【A域】在读取【B域】数据时就需要监听来自【B域】的跨域消息
+**那么问题来了，怎么通过postMessage给localStorage扩容呢？**
 
-注意事项：
 
-1. window.postMessage()方法，向【B域】发消息，应用window.frames[0].postMessage() 这样iframe内的【B域】才可以接到
+下面就是在iframe的子窗口监听message事件，这里将父窗口发来的信息写入自己的localStorage里面（按照情况可以用Json.parse和Json.stringify来转换数据格式）
+    
+            window.addEventListener('message',function(e){
+              if(e.source !== window.parent){//判断是否是父窗口传来的信息
+              return 
+            }else{
+            localStorage.setItem(e.data.key,e.datavalue)
+          }
+        })
 
-2. 同理，【B域】向 【A域】发消息时应用，window.parent.postMessage()
+来个完整版的
 
-3.【A域】的逻辑一定要在iframe 加载完成后进行
+> ```
+> //子窗口初级版
+> window.onmessage = function(e) {
+>   if (e.origin !== 'http://bbb.com') {
+>     return;
+>   }
+>   var payload = JSON.parse(e.data);
+>   localStorage.setItem(payload.key, JSON.stringify(payload.data));
+> };
+> 
+> ```
 
-#### HTML语义化重要性
-https://juejin.im/entry/5ab5f229518825558a069304
+>```
+>//父窗口初级版
+>var win = document.getElementsByTagName('iframe')[0].contentWindow;
+>var obj = { name: 'Jack' };
+>win.postMessage(JSON.stringify({key: 'storage', data: obj}), 'http://bbb.com');
+```
 
-* 正确的标签做正确的事情
-* 页面内容结构化
-* 无CSS样子时也容易阅读，便于阅读维护和理解
-* 便于浏览器、搜索引擎解析。 利于爬虫标记、利于SEO
+
+    //子窗口升级版
+    window.onmessage = function(e) {
+      if (e.origin !== 'http://bbb.com') return;
+      var payload = JSON.parse(e.data);
+      switch (payload.method) {
+        case 'set':
+          localStorage.setItem(payload.key, JSON.stringify(payload.data));
+          break;
+        case 'get':
+          var parent = window.parent;
+          var data = localStorage.getItem(payload.key);
+          parent.postMessage(data, 'http://aaa.com');
+          break;
+        case 'remove':
+          localStorage.removeItem(payload.key);
+          break;
+      }
+    };
+
+    //父窗口升级版
+    var win = document.getElementsByTagName('iframe')[0].contentWindow;
+    var obj = { name: 'Jack' };
+    // 存入对象
+    win.postMessage(JSON.stringify({key: 'storage', method: 'set', data: obj}), 'http://bbb.com');
+    // 读取对象
+    win.postMessage(JSON.stringify({key: 'storage', method: "get"}), "*");
+    window.onmessage = function(e) {
+      if (e.origin != 'http://aaa.com') return;
+      // "Jack"
+      console.log(JSON.parse(e.data).name);
+    };
