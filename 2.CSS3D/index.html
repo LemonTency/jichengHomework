@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>3D</title>
+	<style>
+		#box div{
+			position:absolute;
+			height:160px;
+			width:160px;
+			border:2px solid #000;
+			text-align:center;
+			background:rgba(255,200,100,0.8);
+			font-size:130px;
+
+			
+		}
+		#box{
+			transform-style:preserve-3d;
+			animation:demo ease-in-out 3s infinite;
+			transform-origin:80px 80px 0px; 
+/*			如果origin这个不设置的话，就会导致一些问题*/
+/*			transform:perspective(120px);
+			transform-origin:50px 60px;*/
+
+		}
+		.one{
+			transform:translateZ(80px);
+		}
+		/*前面*/
+		.two{
+			transform:rotateX(90deg)translateZ(-80px);
+		}
+		/*下面*/
+		.three{
+			transform:rotateX(90deg)rotateY(90deg)translateZ(80px)
+		}
+		/*左面*/
+		.four{
+			transform:rotateX(90deg)rotateY(-90deg)translateZ(80px)
+		}
+		/*右面*/
+		.five{
+			transform:rotateY(90deg)rotateX(90deg)translateZ(80px);
+		}
+		/*上面*/
+		.six{
+			transform:translateZ(-80px);
+		}
+		/*后面*/
+
+		@keyframes demo{
+			16%{-webkit-transform:rotateY(-90deg)}
+			33%{-webkit-transform:rotateY(-90deg)rotateZ(135deg)}
+			50%{-webkit-transform:rotateY(225deg)rotateZ(135deg)}
+			66%{-webkit-transform:rotateY(135deg)rotateZ(135deg)}
+			83%{-webkit-transform:rotateX(135deg)}
+
+		}
+	</style>
+</head>
+<body>
+	<div id="view" style="width:160px;height:160px;margin:180px;">
+		<div id="box">
+			<div class="one">A</div>
+			<div class="two">B</div>
+			<div class="three">C</div>
+			<div class="four">D</div>
+			<div class="five">E</div>
+			<div class="six">F</div>
+		</div>
+	</div>
+</body>
+</html>
