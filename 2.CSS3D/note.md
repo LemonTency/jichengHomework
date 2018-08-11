@@ -70,7 +70,22 @@ Chrome 和 Safari 支持替代的 -webkit-perspective 属性。
 ![image.png](https://upload-images.jianshu.io/upload_images/7728915-2b31034a72045bc9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 经过了一番操作之后，终于得到我想要的结果啦！
+其实这一番操作，是历经了千辛万苦的哎
+1. rotateX之后，其实重心也是在改变的，所以在rotateX(90deg)之后再进行rotateY(90deg)的方向不是按照原来的Y轴了，而是按照旋转之后的Y轴
+可以看看这个
+![rotateX，想象着将其正面推倒45°](https://upload-images.jianshu.io/upload_images/7728915-6ea430ef0fdfc633.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![正面推倒.png](https://upload-images.jianshu.io/upload_images/7728915-2367ca0c3fa6cf92.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
+        .div2{
+            transform:rotateX(45deg)rotateY(45deg);
+        }
+![在正面推到45度的基础上，侧身45度](https://upload-images.jianshu.io/upload_images/7728915-c0c761f0166e791e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+        .div2{
+            transform:rotateX(45deg)rotateY(45deg)rotateZ(45deg)
+        }
+![image.png](https://upload-images.jianshu.io/upload_images/7728915-fcb136ec16178251.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+重心是改变了的。
 ![image.png](https://upload-images.jianshu.io/upload_images/7728915-5610b1ee9ab78976.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 贴上CSS代码
@@ -106,11 +121,11 @@ Chrome 和 Safari 支持替代的 -webkit-perspective 属性。
         .three{
             transform:rotateX(90deg)rotateY(90deg)translateZ(80px)
         }
-        /*左面*/
+        /*右面*/
         .four{
             transform:rotateX(90deg)rotateY(-90deg)translateZ(80px)
         }
-        /*右面*/
+        /*左面*/
         .five{
             transform:rotateY(90deg)rotateX(90deg)translateZ(80px);
         }
@@ -126,8 +141,14 @@ Chrome 和 Safari 支持替代的 -webkit-perspective 属性。
             50%{-webkit-transform:rotateY(225deg)rotateZ(135deg)}
             66%{-webkit-transform:rotateY(135deg)rotateZ(135deg)}
             83%{-webkit-transform:rotateX(135deg)}
-
         }
+通过控制台工具
+可以看到绘制的整个过程
+在移动端的绘制过程中如果你同时用鼠标点击你的正方体可能会有点问题，直接把touch-start干掉就行了
+![image.png](https://upload-images.jianshu.io/upload_images/7728915-85ee069d42ea3f64.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+
+
 
 
 
