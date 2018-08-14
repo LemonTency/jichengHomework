@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style media="screen">
+  *{
+    margin: 0;
+    padding: 0;
+  }
+  .umbrella{
+     position: relative;
+     left: 50%;
+     top:200px;
+     transform: translateX(-50%);
+     width: 200px;
+     height: 200px;
+  }
+  /* .top{
+  } */
+  .container{
+     position: relative;
+     width: 200px;
+     height:100px;
+     left: 50%;
+     transform: translateX(-50%);
+  }
+  .container::before{
+    content: "";
+    position: absolute;
+    top:-13px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 10px;
+    height:10px;
+    background:pink;
+    border: 1px solid #aaa;
+    border-radius: 100%;
+  }
+  .box01{
+     position: absolute;
+     width: 200px;
+     height:100px;
+     top: 0;
+     border-radius:100px 100px 0 0;
+     background: linear-gradient(90deg,
+       red 50%,
+       blue 50%);
+  }
+  .box02{
+     position:absolute;
+     width: 200px;
+     height:100px;
+     top: 0;
+     border-radius:100px 100px 0 0;
+     transform: rotateY(45deg);
+     background: linear-gradient(90deg,
+       green 50%,
+       orange 50%);
+  }
+  .box03{
+     position:absolute;
+     width: 200px;
+     height:100px;
+     top: 0;
+     border-radius:100px 100px 0 0;
+     transform: rotateY(70deg);
+     background: linear-gradient(90deg,
+       #f5f5f5 50%,
+       yellow 50%);
+  }
+  .box04{
+     position: absolute;
+     width: 200px;
+     height:100px;
+     top: 0;
+     border-radius:100px 100px 0 0;
+     background: linear-gradient(transparent,
+       rgba(0, 0, 0, 0.6) 100%);  
+     /* rgba() 函数来定义颜色结点。rgba() 函数中的最后一个参数可以是从 0 到 1 的值，它定义了颜色的透明度：0 表示完全透明，1 表示完全不透明。*/
+  }
+  .line{
+    position: relative;;
+    left: 50%;
+    height: 100px;
+    transform: translateX(-50%);
+    width: 2px;
+    background: brown;
+  }
+
+  </style>
+
+</head>
+<body>
+  <div class="umbrella">
+      <div class="container">
+        <div class="box01"></div>
+        <div class="box02"></div>
+        <div class="box03"></div>
+        <div class="box04"></div>
+      </div>
+      <div class="line"></div>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		        body {
+          min-width: 550px;      /* 2x LC width + RC width */
+        }
+        #container {
+          padding-left: 200px;   /* LC width */
+          padding-right: 150px;  /* RC width */
+        }
+        #container .column {
+         position: relative;
+         float: left;   
+       }
+        #center {
+          width: 100%;
+          background-color: pink;
+      }
+        #left {
+          width: 200px;          /* LC width */
+          right: 200px;          /* LC width */
+          margin-left: -100%;
+          background-color: black;
+      }
+        #right {
+          width: 150px;          /* RC width */
+          margin-right: -150px;  /* RC width */
+          background-color: black;
+      }
+        #footer {
+          clear: both;
+
+     }
+      /*** IE6 Fix ***/
+      * html #left {
+         left: 150px;           /* RC width */
+    }
+
+	</style>
+</head>
+<body>
+    <div id="header">header</div>
+    <div id="container">
+	    <div id="center" class="column">center</div>
+	    <div id="left" class="column">left</div>
+	    <div id="right" class="column">right</div>
+	</div>
+	<div id="footer">footer</div>
+</body>
+</html>
