@@ -1,4 +1,4 @@
-#### 双飞翼布局
+####双飞翼布局
 什么是双飞翼布局呢？
 * 事实上，圣杯布局其实和双飞翼布局是一回事。它们实现的都是三栏布局，**两边的盒子宽度固定，中间盒子自适应**也就是我们常说的固比固布局。它们实现的效果是一样的，差别在于其实现的思想。
 像淘宝，是中间栏优先渲染。
@@ -108,24 +108,24 @@ box-shadow: h-shadow（水平阴影的位置） v-shadow （垂直阴影位置�
 
 ![做了一个after,里面包含3个阴影.png](https://upload-images.jianshu.io/upload_images/7728915-30f08aee32ae69c9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
-    <div class = "container"></div>  //html代码
-        .container{
-            background-color:black;
-            width:200px;
-            height:200px;
-            box-shadow: 200px 200px 0 pink;
-        }
-        .container::before {
-            content: '';
-            width: 100px;
-            height: 100px;
-            /*要给before伪类设置一些高度*/
-            display: block;
-            margin: 0;
-            position: absolute; 
-            box-shadow: 200px 0px 0 red,300px 0px 0 yellow,400px 0px 0 blue;
-           /* box-shadow第一第二个变量是代表相对于我container这个元素的距离，水平偏移200px，垂直偏移00px*/
-        }
+  <div class = "container"></div>  //html代码
+    .container{
+      background-color:black;
+      width:200px;
+      height:200px;
+      box-shadow: 200px 200px 0 pink;
+    }
+    .container::before {
+        content: '';
+        width: 100px;
+        height: 100px;
+        /*要给before伪类设置一些高度*/
+        display: block;
+        margin: 0;
+        position: absolute; 
+        box-shadow: 200px 0px 0 red,300px 0px 0 yellow,400px 0px 0 blue;
+       /* box-shadow第一第二个变量是代表相对于我container这个元素的距离，水平偏移200px，垂直偏移00px*/
+    }
 **关于border-radius**
 
         border-radius:2em;
@@ -139,8 +139,46 @@ box-shadow: h-shadow（水平阴影的位置） v-shadow （垂直阴影位置�
  linear-gradient
 radial-gradient
 http://www.runoob.com/css3/css3-gradients.html
-        
-####BFC,IFC,FFC
+渐变来画一个小雨伞
+重点一：利用线性渐变来画多几个颜色、
+重点二：利用translateY来调整每个面露出来宽度（要记住，做translate变换就让我们想起了        
+####BFC,IFC,FFC，GFC
+**FC是什么？**
+Formatting context 是 W3C CSS2.1 规范中的一个概念。它是页面中的一块渲染区域，并且有一套渲染规则，它决定了其子元素将如何定位，以及和其他元素的关系和相互作用。最常见的 Formatting context 有 Block fomatting context (块级格式化上下文，简称BFC)和 Inline formatting context (简称IFC)。
+按照上面来讲，BFC就是决定这个块级元素应该如何渲染的规则。跟外面的没有关系。
+平常的应用：
+被一个浮动元素遮挡，所以就用（overflow:hidden或者float:left等使被遮挡的那个元素变成BFC，就不会被挡住了，还有高度塌陷，还有边距重叠 ）
+ **BFC**
+1. 如何产生BFC？（产生了BFC之后这个容器里面的元素就会按照BFC的规则来渲染，与其他盒子产生隔离，不会被影响到）
+* 根元素
+* float属性不为none
+* position为absolute或fixed
+* display为inline-block, table-cell, table-caption, flex, inline-flex
+* overflow不为visible
+**渲染规则一：BFC区域不会跟float元素重叠**
+看例子：粉红色的被遮住了！！
+![image.png](https://upload-images.jianshu.io/upload_images/7728915-d50b1bbe33cc65e4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+利用BFC区域不会跟float元素重叠的特性，我们给粉红色的块加上一个overflow:hidden，就让他变成了BFC，所以就不会被红色的压在下面了
+![image.png](https://upload-images.jianshu.io/upload_images/7728915-d04cafbd46dad7b2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+**渲染规则二：计算元素高度时，浮动元素也会参与计算**
+一般情况下，父元素的两个子元素都是浮动的话，就会出现高度塌陷的问题，可以看到，我们父元素par设置边框，但是塌陷了，并没有把两个子元素套起来。
+![image.png](https://upload-images.jianshu.io/upload_images/7728915-f4b9cddfd6ad30bd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+但是我们想到了BFC计算元素高度的时候，浮动元素也会参与计算，那么我们为了清除内部浮动，使得父元素计算高度的时候也把子元素计算在内，所以我们给父元素添加一个属性，例如（overflow:hidden)，就可以解决高度塌陷的问题了。
+**渲染规则三：两个BFC区域之间是不会发生边距重叠的**
+![image.png](https://upload-images.jianshu.io/upload_images/7728915-d378940ea22d03bb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+那我们直接给两个P都加上overflow:hidden就可以完美解决边距重叠的问题。
+或者我们把其中一个 hehe或者haha加上overflow:hidden也可以的。
+![image.png](https://upload-images.jianshu.io/upload_images/7728915-93da4d51f6afe7f6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+**IFC**
+IFC(Inline Formatting Contexts)直译为"内联格式化上下文"，IFC的line box（线框）高度由其包含行内元素中最高的实际高度计算而来（不受到竖直方向的padding/margin影响)
+
+**FFC**
+FFC(Flex Formatting Contexts)直译为"自适应格式化上下文"，display值为flex或者inline-flex的元素将会生成自适应容器（flex container）。
+
+**GFC**
+GFC(GridLayout Formatting Contexts)直译为"网格布局格式化上下文"，当为一个元素设置display值为grid的时候，此元素将会获得一个独立的渲染区域，我们可以通过在网格容器（grid container）上定义网格定义行（grid definition rows）和网格定义列（grid definition columns）属性各在网格项目（grid item）上定义网格行（grid row）和网格列（grid columns）为每一个网格项目（grid item）定义位置和空间。 
+
+
 
 **最后是用了mix-blend-mode来实现给文字上纹理**
 有趣
