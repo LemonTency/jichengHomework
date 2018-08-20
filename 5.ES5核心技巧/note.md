@@ -1,3 +1,102 @@
+1. 立即调用函数表达式（IIFE）
+特点一：
+当函数变成立即执行的函数表达式时（就类似于我们说的块级作用域），表达式中的变量不能从外部访问。
+特点二：
+将 IIFE 分配给一个变量，不是存储 IIFE 本身，而是存储 IIFE 执行后返回的结果。
+
+        (function(){alert(1)})()
+函数声明是不能直接在后面加括号这样的，function(){}()这个样子，浏览器解析完function(){}发现后面还有括号，会判断是错误的，所以可以在function前面加上+ - ~这些让他们变成函数表达式（跟在外面括一个括号的原理是一样的），然后立即执行。
+看看下面的代码及其执行结果：
+
+    +function(){
+        console.log(a);//ƒ a(){console.log(2);}
+        a();//2
+        var a = function(){
+            console.log(1);
+        }
+        function a(){
+            console.log(2);
+        }
+        console.log(a);//ƒ (){console.log(1);}
+        a();//1
+        var c=d=a
+    }();
+    console.log(d);//ƒ (){console.log(1);}
+    console.log(c);//3
+
+2.在es5中没有函数级作用域的概念，也就是说，函数里面定义的局部变量只在函数内部有用，例如
+
+        function test(){
+             var a;
+             if(false){a = 1}
+            alert(a);        
+        }
+        test();//undefined
+        alert(a);//Uncaught ReferenceError: a is not defined
+es6中就有块级作用域的概念，在一个块中{    }我们可以定义的一些变量我们可以配合let来使用。
+
+           {
+              let b = 2;
+          }
+            console.log(b);  //Uncaught ReferenceError: b is not defined
+没和let一起使用像这个就没啥用处了
+
+          {
+             var c = 3;
+          }
+           console.log(c) //3
+**但是如果需要兼容很老旧的浏览器，怎么实现let这样的效果呢？**
+
+        {
+          try{
+            throw 1;
+          }catch(a){
+            console.log(a);  //1
+            }
+        }
+    console.log(a); //Uncaught ReferenceError: a is not defined
+使用with也可以形成块级作用域，但是可能会存在一些问题
+
+        var tency = {a:1};
+            with(tency){
+         var b = 2;  //如果with(tency)的情况下，要对tency里面没有的变量进行赋值，相当于创建了一个新的全局变量，而不是在tency这个作用域里面创建的
+    }
+    console.log(tency.b);   //undefined
+    console.log(b)  //2
+
+**提升的时候，函数的优先级要高于变量的优先级**
+
+        (function(){
+        console.log(a);
+        var a = 1;
+        function a(){
+            console.log(a);
+        }
+    })() //ƒ a(){console.log(a);}
+3. 关于闭包
+
+        function test(){
+          var a = 1;
+          return function(){
+
+            }//a会被回收，在外面没有被引用
+        }
+
+        function test(){
+          var a = 1;
+          return function(){
+            eval("");
+          }//a 不会被回收，因为不确定会不会用到a,类似的还有with和try catch
+        }
+
+        function test(){
+          var a = 1;
+          return function(){
+              window.eval("");
+          }//a 会被回收，将eval的作用域不是闭包，变成了window 
+      }
+
+### 关于原型和原型链
 对象是函数创建的，而函数却又是一种对象？
  Function.prototype指向的对象，它的__proto__是不是也指向Object.prototype？
 
