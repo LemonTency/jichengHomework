@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>jQuery 源码解读</title>
+</head>
+<body>
+    <script>
+        var obj = {
+            a:function(){
+                console.log(1);
+                return this;
+            },
+            b:function(){
+                console.log(2);
+            }
+        }
+        //$("#test").css().attr("")
+        // obj.a().b().parent();
+        // obj.eq(1);
+        //堆栈的存储 $("#ss")-> ["a“,"b"]
+        var s = Object(this);
+        var length = s.length >>> 0;
+        //ArrayBuffer 
+        alert(length);
+        var a = true;
+        a && test();
+        a || test();
+        // function siblingCheck(a,b){
+        //     var cur = c && a && ~b. || ~a.;;
+        // }
+        // a && (b && c)
+        var s ="p";
+        var obj = {
+            index:function(){},
+            p:function(){}
+        }
+        obj[s] && obj[s]();
+    </script>
+</body>
+</html>

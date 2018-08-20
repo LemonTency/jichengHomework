@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>jquery技术内幕</title>
+</head>
+
+<body>
+    <script>
+        // var jQuery = (function (window, undefined) {
+        //     var jQuery = function () {
+        //         return new jQuery.fn.init();//jQuery
+        //     }
+        //     jQuery.fn = jQuery.prototype = {
+        //         init: function () {
+        //         },
+        //         extend:function(){
+        //             // this 
+        //         }
+        //     };
+
+        //     jQuery.fn.init.prototype = jQuery.fn;
+        //     return jQuery;
+        // })(window);
+        // jQuery.fn.extend //直接对原型连进行操作
+        // jQuery.extend //直接添加静态方法
+        // jQuery.extend.version = 1;
+        // $.version = 1;
+        // // $.ss        
+        // jQuery("#test").tips({
+        //     text:"xxx"
+        // })
+        //重写 重载 test(1)
+
+        function addMethod(object, name, fn) {
+            var old = object[name]; //上一次的函数值
+            object[name] = function(){
+                if(fn.length == arguments.length){
+                    return fn.apply(this,arguments);
+                }else if(typeof old == "function"){
+                    return old.apply(this,arguments);
+                }
+            }
+        }
+        var people = ["laoyuan", "zhijia", "yideng"];
+        addMethod(people,"find",function(){
+            return this.values;
+        })
+        addMethod(people,"find",function(firstName){
+            return 1;
+        });
+        addMethod(people,"find",function(firstName,lastName){
+            return 2;
+        });
+        // people.find();
+        people.find("laoyuan");
+        // people.find("laoyuan","zhijia")
+        //$.type = 
+        // (function(window,undefined){
+        //     var class2type = {};
+        //     jQuery.each("Boolean Number String Function Array Date RegExp Object Error Symbol").split(" "),function(){
+        //         class2type["[obejct"+name] = name;
+        //     });
+        //     typeof(obj) == "object" && class2typep[]
+        // })(window)
+        //连贯接口
+        //1.链式调用 2.命令查询媒体 重载 3.参数映射
+    </script>
+</body>
+
+</html>
