@@ -105,18 +105,72 @@
    	}
 
 
-   	function test(){
-   		this.a = 30,
+   	this.a = 30;
+   	var yideng = {
+   		a:20,
    		init:function(){
-   			a:20;
-   			alert(this.a) //20
+   			console.log(this.a)
    		}
    	}
+   	yideng.init();//20,因为在yideng 的作用域里面的a=20;
 
 
+   	this.a = 30;
+    var yideng = {
+   		a:20,
+   		init:function(){
+   			function test1(){
+   				console.log(this.a); 
+   			}
+   			test1();
+   		}
+   	}
+   	yideng.init() //test1()这里指向全局30,这里有一个闭包，指向window
 
 
+   	this.a = 30;
+   	var yideng = {
+   		a:20,
+	   		init : ()=>{
+	   			console.log(this.a);//30,箭头函数会bind this,箭头函数知识会继承父元素的this,会找到父亲的顶级作用域，箭头函数内部的this是词法作用域，由上下文确定。
+	   		}
+   	}
+    yideng.init()
 
+
+    class test{
+    	a(){
+    		console.log(1)
+    	}
+    }//class其实只是一个function
+    test.prototype.a = function(){
+    	console.log(2)
+    }
+    (new test).a();//结果是2,类是基于es6的原型链实现的
+
+    setTimeout(function(){
+    	while(true){
+    		console.log("helloworld")
+    	}
+    },100) //死循环。一直helloworld
+    setTimeout(function(){
+    	console.log("hello hiki")
+    },100)
+
+
+    setTimeout(function(){
+    	while(true){
+    		console.log("helloworld")
+    	}
+    },200) 
+    setTimeout(function(){
+    	console.log("hello hiki")
+    },100) //先执行一个hello hiki.然后再死循环。一直helloworld
+
+ 	for(let i = (setTimeout(()=>console.log("a -> ",i)),0);
+ 		setTimeout(() => console.log("b->",i)),i<2;i++){
+ 		i++
+ 	}
 	</script>
 </body>
 </html>
