@@ -8,21 +8,21 @@
 函数声明是不能直接在后面加括号这样的，function(){}()这个样子，浏览器解析完function(){}发现后面还有括号，会判断是错误的，所以可以在function前面加上+ - ~这些让他们变成函数表达式（跟在外面括一个括号的原理是一样的），然后立即执行。
 看看下面的代码及其执行结果：
 
-    +function(){
-        console.log(a);//ƒ a(){console.log(2);}
-        a();//2
-        var a = function(){
-            console.log(1);
-        }
-        function a(){
-            console.log(2);
-        }
-        console.log(a);//ƒ (){console.log(1);}
-        a();//1
-        var c=d=a
-    }();
-    console.log(d);//ƒ (){console.log(1);}
-    console.log(c);//3
+	+function(){
+   		console.log(a);//ƒ a(){console.log(2);}
+   		a();//2
+   		var a = function(){
+   			console.log(1);
+   		}
+   		function a(){
+   			console.log(2);
+   		}
+   		console.log(a);//ƒ (){console.log(1);}
+   		a();//1
+   		var c=d=a
+   	}();
+   	console.log(d);//ƒ (){console.log(1);}
+   	console.log(c);//3
 
 2.在es5中没有函数级作用域的概念，也就是说，函数里面定义的局部变量只在函数内部有用，例如
 
@@ -36,7 +36,7 @@
 es6中就有块级作用域的概念，在一个块中{    }我们可以定义的一些变量我们可以配合let来使用。
 
            {
-              let b = 2;
+    	      let b = 2;
           }
             console.log(b);  //Uncaught ReferenceError: b is not defined
 没和let一起使用像这个就没啥用处了
@@ -48,89 +48,89 @@ es6中就有块级作用域的概念，在一个块中{    }我们可以定义�
 **但是如果需要兼容很老旧的浏览器，怎么实现let这样的效果呢？**
 
         {
-          try{
-            throw 1;
-          }catch(a){
-            console.log(a);  //1
-            }
+    	  try{
+    		throw 1;
+    	  }catch(a){
+    		console.log(a);  //1
+    	    }
         }
     console.log(a); //Uncaught ReferenceError: a is not defined
 使用with也可以形成块级作用域，但是可能会存在一些问题
 
         var tency = {a:1};
-            with(tency){
+   	        with(tency){
          var b = 2;  //如果with(tency)的情况下，要对tency里面没有的变量进行赋值，相当于创建了一个新的全局变量，而不是在tency这个作用域里面创建的
-    }
-    console.log(tency.b);   //undefined
-    console.log(b)  //2
+   	}
+   	console.log(tency.b);   //undefined
+   	console.log(b)  //2
 
 **提升的时候，函数的优先级要高于变量的优先级**
 
         (function(){
-        console.log(a);
-        var a = 1;
-        function a(){
-            console.log(a);
-        }
-    })() //ƒ a(){console.log(a);}
+   		console.log(a);
+   		var a = 1;
+   		function a(){
+   			console.log(a);
+   		}
+   	})() //ƒ a(){console.log(a);}
 3. 关于闭包
 
-        function test(){
-          var a = 1;
-          return function(){
+   	    function test(){
+   		  var a = 1;
+   		  return function(){
 
-            }//a会被回收，在外面没有被引用
-        }
+   		    }//a会被回收，在外面没有被引用
+   	    }
 
-        function test(){
-          var a = 1;
-          return function(){
-            eval("");
-          }//a 不会被回收，因为不确定会不会用到a,类似的还有with和try catch
-        }
+   	    function test(){
+   		  var a = 1;
+   		  return function(){
+   			eval("");
+   		  }//a 不会被回收，因为不确定会不会用到a,类似的还有with和try catch
+   	    }
           //类似的，try...catch(){} with()和eval在同样的位置，他们也不会被回收
 
 
-        function test(){
-          var a = 1;
-          return function(){
-              window.eval("");
-          }//a 会被回收，将eval的作用域不是闭包，变成了window 
-        }
+   	    function test(){
+   		  var a = 1;
+   		  return function(){
+   			  window.eval("");
+   		  }//a 会被回收，将eval的作用域不是闭包，变成了window	
+   	    }
 
 
 4. 箭头函数/this问题
 
-        this.a = 30;
-        var yideng = {
-        a:20,
-        init:function(){
-            console.log(this.a)
-        }
-        }
+  	    this.a = 30;
+   	    var yideng = {
+   		a:20,
+   		init:function(){
+   			console.log(this.a)
+   		}
+       	}
        yideng.init();//20,因为在yideng 的作用域里面的a=20;
 
 
-        this.a = 30;
+   	    this.a = 30;
             var yideng = {
-            a:20,
-            init:function(){
-                function test1(){
-                    console.log(this.a); 
-                }
-                test1();
-              }
-          }
-          yideng.init() //test1()这里指向全局30,这里有一个闭包，指向window
+   		    a:20,
+   		    init:function(){
+   			    function test1(){
+   				    console.log(this.a); 
+   			    }
+   			    test1();
+   		      }
+   	      }
+   	      yideng.init() //test1()这里指向全局30,这里有一个闭包，指向window
 
 
-            this.a = 30;
-            var yideng = {
-              a:20,
-              init : ()=>{
-                console.log(this.a);//30,箭头函数会bind this,箭头函数知识会继承父元素的this,会找到父亲的顶级作用域，箭头函数内部的this是词法作用域，由上下文确定。
-            }
-        }
+         	this.a = 30;
+   	        var yideng = {
+   		      a:20,
+	   		  init : ()=>{
+	   			console.log(this.a);//30,箭头函数会bind this,箭头函数知识会继承父元素的this,会找到父亲的顶级作用域，箭头函数内部的this是词法作用域，由上下文确定。
+	   		}
+   	    }
         yideng.init()
 
 ***
@@ -234,7 +234,45 @@ ES5 中声明函数
         (new test).a()  //2
 类是基于原型链实现的，所以两个a都是在原型链上面的，后面的会把前面的覆盖。
 
-6. 关于let 
+看看京城一灯的这道题，就集合到了我们原型链和this的知识
+
+    this.a = 20;
+    var test = {
+        a:40,
+        init:()=>{
+            console.log(this.a);
+            function go(){
+                this.a = 60;
+                console.log(this.a)
+            }
+            go.prototype.a = 50;
+            return go;
+        }
+    }
+    var p = test.init();
+    p();
+    new(test.init())() //20 60 60 60
+简单解释一波： this优先级比prototype高，本身找不到某个属性才会去原型链上面找。
+谁调用this,this就指谁
+* 箭头函数init()的父级是test,test的a等于20
+*  函数go中已经定义了this.a为60，所以this.a=60
+*  p也就是函数go，
+
+        function go(){
+            this.a = 60;
+            console.log(this.a)
+        }//60
+* new的时候构造函数会执行一遍，原型上的a是等于50，但是他自己本身的还是60
+6. 函数变量提升先于变量
+
+ 
+        (function(){
+        var a = 20;
+        function a(){}
+        console.log(a)
+        })()
+
+7. 关于let 
 
         var i;
         if (true){
@@ -243,6 +281,32 @@ ES5 中声明函数
         }
         alert(i);  //报错，i is not defined
 因为es6中规定了在{  }一个块中，用let来声明一个数的时候。必须先声明，后赋值。不然会报错的。这就是我们所说的暂时性死区。
+
+8. 原型链及相关的面向对象（这个一定要记下来）
+
+        var Car = function(color){
+            this.color = color;
+        }
+        Car.prototype.sale = function(){
+        console.log(this.color + '色的车卖了100万')
+        }
+        var BMW = function(color){
+            Car.call(this.color)
+        }
+        //需要解决的问题有
+        //1.拿到父类原型链上面的方法
+        //2.不能让构造函数执行两次
+        //3.引用的原型链不能按地址引用（不然子类上面的修改会影响到父类，可以使用Object.create来给做个副本）
+        //4.修正子类的constructor 
+        var __pro = Object.create(Car.prototype);//复制原型链
+        __pro.constructor = BMW;
+        BMW.prototype = __pro;
+        var m = new BMW('red');
+        console.log(m)
+
+总结：
+![image.png](https://upload-images.jianshu.io/upload_images/7728915-0e69659c24132cbe.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
 
         
 
