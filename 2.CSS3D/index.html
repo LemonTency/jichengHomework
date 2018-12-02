@@ -20,8 +20,8 @@
 			animation:demo ease-in-out 3s infinite;
 			transform-origin:80px 80px 0px; 
 /*			如果origin这个不设置的话，就会导致一些问题*/
-/*			transform:perspective(120px);
-			transform-origin:50px 60px;*/
+			transform:perspective(120px);
+			transform-origin:50px 60px;
 
 		}
 		.one{
@@ -40,8 +40,11 @@
 			transform:rotateX(90deg)rotateY(-90deg)translateZ(80px)
 		}
 		/*右面*/
-		.five{
+		/* .five{
 			transform:rotateY(90deg)rotateX(90deg)translateZ(80px);
+		} */
+		.five{
+			transform:rotateX(90deg)translateZ(80px);
 		}
 		/*上面*/
 		.six{

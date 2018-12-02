@@ -1,11 +1,98 @@
 ####基础知识
+https://www.zhangxinxu.com/wordpress/2010/11/css3-transitions-transforms-animation-introduction/
+
 https://www.zhangxinxu.com/wordpress/2012/09/css3-3d-transform-perspective-animate-transition/
 可以参见博文
-关于CSS动画
+
+#####关于CSS2D动画
+* transition, 过渡
+transition属性是下面几个属性的缩写：
+1. transition-property
+指定过渡的属性值，比如transition-property:opacity就是只指定opacity属性参与这个过渡。
+all是说明所有属性都参与这个过渡。
+2. transition-duration
+指定这个过渡的持续时间
+3. transition-delay
+延迟过渡时间
+4. transition-timing-function
+指定过渡动画缓动类型，有ease | linear | ease-in | ease-out | ease-in-out | cubic-bezier()
+其中，linear线性过度，ease-in由慢到快，ease-out由快到慢，ease-in-out由慢到快在到慢。
+写个小小的例子：
+
+        div{
+            width: 100px;
+            height: 100px;
+            background-color: #527281;
+            border-radius: 5px;
+            border: 1px solid #999;
+        }
+        .trans{
+            -webkit-transition-property: background-color;
+            -webkit-transition-duration: 0.3s;
+            -webkit-transition-timing-function: ease;
+        }
+        .trans:hover{
+            background-color:black;
+        }
+        <div class = "trans">
+
+        </div>
+hover之后background-color就会改变了。
+
+        .trans_list{
+            width: 50px;
+            height: 50px;
+            margin: 50px 0;
+            background-color: #888;
+        }
+        .ease{
+            -webkit-transition: all 4s ease;
+        }
+        .trans_list:hover{
+            background-color: #8088C8;
+            margin-right: 20px;
+            border-radius: 5px;
+        }
+        <div id="transBox" class="trans_box">
+            <div class="trans_list ease">ease</div>
+            <div class="trans_list ease">ease</div>
+            <div class="trans_list ease">ease</div>
+            <div class="trans_list ease">ease</div>
+        </div> 
+
+* transform, 变换
+transform指变换，，拉伸，压缩，旋转，偏移。见下面示例代码：
+
+        .trans_skew { transform: skew(35deg); }
+        .trans_scale { transform:scale(1, 0.5); }
+        .trans_rotate { transform:rotate(45deg); }
+        .trans_translate { transform:translate(10px, 20px); }
+当transform和transition一起组合的时候，就会产生妙不可言的化学效果
+
+        .trans{
+            width: 200px;
+            height: 200px;
+            margin: 200px auto;
+            background-color: #8088C8;
+            text-align: center;
+            -webkit-transition: all 2s ease-in-out;
+            -moz-transition: all 2s ease-in;
+        }
+        .trans:hover{
+            -webkit-transform: rotate(720deg) scale(2,2);       
+        }
+        <div class="trans">
+        摸我一下看看
+        </div>
+![image.png](https://upload-images.jianshu.io/upload_images/7728915-2444958551d5c1c1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](https://upload-images.jianshu.io/upload_images/7728915-f3569e41a9e68f41.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+* animation  动画
+
 如需在 CSS3 中创建动画，您需要学习 @keyframes 规则。
 例如：
 
-        @keyframes demo{
+        @keyframes myfirst{
             16%{-webkit-transform:rotate(-90deg)}
         }
 然后你必须在某个div中绑定这个动画
