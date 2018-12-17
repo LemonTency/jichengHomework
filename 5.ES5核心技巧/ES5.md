@@ -119,3 +119,33 @@ person2是个空对象，但是他的\__proto__属性上面就是person1。
     console.log('Is rect an instance of Shape?',
       rect instanceof Shape); // true
     rect.move(1, 1); // Outputs, 'Shape moved
+
+
+[`Object.keys()`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/keys "Object.keys() 方法会返回一个由一个给定对象的自身可枚举属性组成的数组，数组中属性名的排列顺序和使用 for...in 循环遍历该对象时返回的顺序一致 。")
+
+Object.keys 返回一个所有元素为字符串的数组，其元素来自于从给定的object上面可直接枚举的属性。这些属性的顺序与手动遍历(for...in...)该对象属性时的一致。
+
+    var arr = ['a', 'b', 'c'];
+    console.log(Object.keys(arr)); // ["0", "1", "2"]
+
+    var obj = {a:1,b:2,c:3};
+    console.log(Object.keys(obj));// ["a", "b", "c"]
+
+#####额外的数组
+[`Array.prototype.forEach()`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach "forEach() 方法对数组的每个元素执行一次提供的函数。")
+
+forEach() 方法对数组的每个元素执行一次提供的函数
+
+>array.forEach(callback(currentValue(数组当前项的值), index(数组当前项的索引), array(数组对象本身)){
+    //do something
+}, this)
+
+    var arr2 = [1,2,3,4,5];
+    arr2.forEach((element) => {
+        console.log(element*3)  //  3,6,9,12,15
+    })
+
+https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach
+
+
+
