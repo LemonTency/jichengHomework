@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>新闻管理系统</title>
+</head>
+<style>
+</style>
+<body>
+<form action="mysql.php">
+    <p>
+        <label for="newsid">新闻id</label>
+        <input type="text" id="newsid"name="newsid"/>
+    </p>
+    <p>
+        <label for="newstitle">新闻标题</label>
+        <input type="text" id="newstitle"name="newstitle"/>
+    </p>
+    <p>
+        <label for="newsimg">新闻图片</label>
+        <input type="text"id="newsimg"name="newsimg">
+    </p>
+    <p>
+        <label for="newscontent">新闻内容</label>
+        <textarea name="newscontent" id="newscontent" cols="30" rows="10"></textarea>
+    </p>
+    <p>
+        <label for="addtime">提交时间</label>
+        <input type="date" id="addtime" name="addtime"/>
+    </p>
+    <p>
+        <input type="submit" value="提交"/>
+        <input type="reset" />
+    </p>
+</form>
+</body>
+</html>
