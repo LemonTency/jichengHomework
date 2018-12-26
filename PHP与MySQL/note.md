@@ -91,7 +91,8 @@ PHP session 变量用于存储关于用户会话（session）的信息，或者�
 
 
 1.2 OO的概念解读以及Prototype
-
+  https://www.cnblogs.com/52php/p/5658135.html
+  PHP面向对象的教程
   1.2.1 面向对象的产生
 
 软件危机（开发和维护过程中遇到的一系列严重问题）——>软件工程学——>软件开发的方法（面向对象）
@@ -147,6 +148,143 @@ $对象名称 = new 类名称（[参数列表]）；
     $taobao->getUrl();
     echo '<br/>';
 
+1.2.5 构造函数和析构函数
+
+   构造函数 − 主要用来在创建对象时初始化对象， 即为对象成员变量赋初始值，总与new运算符一起使用在创建对象的语句中。
+    析构函数 − 析构函数(destructor) 与构造函数相反，当对象结束其生命周期时（例如对象所在的函数已调用完毕），系统自动执行析构函数。析构函数往往用来做"清理善后" 的工作（例如在建立对象时用new开辟了一片内存空间，应在退出前在析构函数中用delete释放）。
+
+    class Person{
+    function __construct(){
+        echo "构造函数";
+        echo "<br/>";
+        $this->name = "小明";
+    }
+
+    function __destruct(){
+        echo "销毁".$this->name;    
+        echo "<br/>";
+    }
+    }
+
+    $obj1 = new Person();
+![image.png](https://upload-images.jianshu.io/upload_images/7728915-e11fe40d856acadc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+1.2.6  PHP的封装
+魔术方法：__set , __get , __isset,__unset(只针对private,protected变量,)
+__set:用于设置私有属性值。
+__get: 用于获取私有属性值。
+__isset: 用于检测私有属性值是否被设定。
+__unset: 用于删除私有属性。
+PHP中的访问控制：
+public（公有）：公有的类成员可以在任何地方被访问。
+protected（受保护）：受保护的类成员则可以被其自身以及其子类和父类访问。
+private（私有）：私有的类成员则只能被其定义所在的类访问。
+
+    class myClass{
+      public $public = "public";
+      private $private = "private";
+      protected $protected = "protected";
+
+      public function getThing(){
+        echo $this->public;
+        echo "<br/>";
+        echo $this->private;
+        echo "<br/>";
+        echo $this->protected;
+        echo "<br/>";
+      }
+    }
+
+    $obj = new myClass();
+    $obj->getThing();
+    $obj->public;
+    $obj->protected; //产生错误
+    $obj->private; //产生错误
+因为getThing是在这个类的内部，所以他是肯定可以访问到这个类里面定义的任何类型的变量。
+但是如果是在外部直接$obj->protected去访问的话是访问不到的。
+
+1.2.7继承
+![image.png](https://upload-images.jianshu.io/upload_images/7728915-5708f039261ac741.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+* 重写和重载（PHP中6.4看不懂）
+重写：就是当子类继承父类的一些方法后，子类又在其内部定义了相同的方法，则这个新定义的方法会覆盖继承而来的父类的方法，子类只能调用其内部定义的方法。（参数和名字）
+重载： 存在多个同名方法,但参数类型/个数不同. 传不同的参数,调用不同的方法。
+例如在父类中我们定义了这样一个函数：
+
+      public function cardInfo(){
+        echo ’helloworld‘
+      }
+
+在子类中又定义了这样一个函数：
+
+    public function cardInfo($par){
+        echo $par;
+    }
+如果我们在子类的实例化对象\$obj中调用\$obj->cardInfo(20);
+那么就会打印出20.
+如果\$obj->cardInfo();那么执行的将是父类中的函数，也就是会打印出helloworld.
+
+* 类继承的应用
+
+* 子类中重载父类的方法。
+1.2.8 抽象类和接口
+* 抽象方法和抽象类
+![image.png](https://upload-images.jianshu.io/upload_images/7728915-c9494e79fb55de62.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](https://upload-images.jianshu.io/upload_images/7728915-c085819f85f97337.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+1. 含有抽象方法的类必须是抽象类
+2. 抽象类不一定非得含有抽象方法
+3. 抽象类可以存在普通的方法
+4. 抽象类不能被实例化，必须由一个子类去继承，并且把抽象类的抽象方法都实现了
+
+        abstract class Person{
+            //抽象方法，没有方法体
+            public abstract function eat();
+        }
+        class Man extends Person{
+            public function eat(){
+                echo "Man eat";
+            }
+        }
+
+        $man = new Man();
+        $man->eat();
+
+
+* 接口技术
+1. 接口声明的关键字是interface
+2. 接口可以声明常量也可以声明方法
+3. 接口中的方法都是抽象方法，不用abstract去人肉的定义
+4. 接口不能被实例化，需要一个类去实现它
+5. 一个类不能继承多个类，但是一个类可以实现多个接口
+
+        interface Person{
+            const NAME = 'xiaowang';
+            public function run();
+            public function eat();
+        }
+        interface Study{
+            public function study();
+        }
+        class Student implements Person,Study{
+            public function run(){
+                echo "run";
+            }
+            //对接口的实现
+            public function eat(){
+                echo "eat";
+            }
+            public function study(){
+               echo "study";
+            }  
+        }
+
+        $obj = new Student();
+        $obj->run(); //run 
+        $obj->eat();//eat
+        $obj->study();//study
+
+* 多态应用
+多态就是把子类对象赋值给父类引用，然后调用父类的方法，去执行子类覆盖父类的那个方法
+![image.png](https://upload-images.jianshu.io/upload_images/7728915-1e790327a5cc679e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 1.3 PHP和JavaScript的比较
 
@@ -281,5 +419,4 @@ http://www.runoob.com/php/php-mysql-insert.html
 原因: 写成\$_REQUEST("")，php首先会认为get()是一个方法，但是前面又多了\$符号，php又认为这是一个变量，而变量名不能作为function的名字，所有会抛出"Function name must be a string"。
 
 2.5 还有作业
-
 
