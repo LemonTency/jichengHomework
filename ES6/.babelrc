@@ -1,0 +1,23 @@
+// {
+//   "presets": [
+//     ["env", {
+//       "modules": false,
+//       "targets": {
+//         "browsers": ["> 1%", "last 2 versions", "not ie <= 8"]
+//       }
+//     }],
+//     "stage-2"
+//   ],
+//   "plugins": ["transform-vue-jsx", "transform-runtime"]
+// }
+
+
+{
+  "presets": [
+    "latest"
+  ],
+  "plugins": []
+}
+
+//说明了要把当前js直接编译成指定的版本
+
