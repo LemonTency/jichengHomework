@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>旋转图片</title> 
+    <style>
+        .one{
+            width: 400px;
+            height: 400px;
+            margin: 200px;
+            overflow: hidden;
+            background-color: #678867;
+        }
+        img{
+            transform: rotate(45deg) ;
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%)
+        }
+    </style>
+</head>
+<body>
+    <div class="one">
+        <img src = "./img.png"/>
+    </div>
+</body>
+</html>
