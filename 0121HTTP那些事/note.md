@@ -375,9 +375,35 @@ HTTP 3与HTTP 1.1和HTTP 2没有直接的关系
 
 ![image.png](https://upload-images.jianshu.io/upload_images/7728915-48ac98e3a2cec254.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
-
-
-
 参考博文：https://yuchengkai.cn/docs/cs/#%E7%8A%B6%E6%80%81%E6%9C%BA
+####Nginx安装及配置
+* 环境：linux服务器，CentOS系统
+http://www.runoob.com/linux/nginx-install-setup.html
+![image.png](https://upload-images.jianshu.io/upload_images/7728915-dc7b088e95334311.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
+Nginx 配置时使用vi出现了一些问题，i 在光标前插入字符，要修改内容就要先输入i才能进行下一步操作。修改完成之后点击esc然后:wq就可以保存并退出了。
 
+检查配置文件nginx.conf的正确性命令：
+也成功了。
+![image.png](https://upload-images.jianshu.io/upload_images/7728915-3d2f5037d0d0f08b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+注意路径，注意安装版本。
+![image.png](https://upload-images.jianshu.io/upload_images/7728915-29ec6065e5a123f1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+遇到了一个困扰很久的问题：
+[Nginx [emerg]: bind() to 0.0.0.0:80 failed (98: Address already in use)](https://www.cnblogs.com/toosuo/p/3571114.html)
+![image.png](https://upload-images.jianshu.io/upload_images/7728915-04e5595de54807a6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](https://upload-images.jianshu.io/upload_images/7728915-7bfa96cdabda557c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+使用netstat -ltunp去看端口的使用情况。
+发现是tcp在占用这个端口，直接使用命令关闭。
+        
+    sudo fuser -k 80/tcp
+
+##### 怎么配反向代理
+在sever前面加上
+![image.png](https://upload-images.jianshu.io/upload_images/7728915-6981b13711f0e595.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+上图的意思就是反向代理到本机上面的8080端口。如果多加几个ip就能做负载均衡。
+接下来进行设置：
+location+反向代理的路径（这是用户输入的路径）
+proxy_pass:后面一定要跟协议头（http://）proxy_pass后面的路径是真正要去的服务器。
+注意：配置的时候一定要原封不动的将下面的这些都复制一波。
+更加详细的可以看资料中文件。
+![image.png](https://upload-images.jianshu.io/upload_images/7728915-6bef88c3d6da585a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
