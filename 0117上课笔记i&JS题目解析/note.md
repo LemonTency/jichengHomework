@@ -212,3 +212,207 @@ ps: 一定要好好去使用。
         }
         sum(5.0)
 
+#### 异步编程
+async await 
+有一个困扰我很久的问题，await到底有啥用。
+https://www.cnblogs.com/YMaster/p/6920441.html
+
+        let sleep = function (time) {
+            return new Promise(function (resolve, reject) {
+                setTimeout(function () {
+                    resolve();
+                }, time);
+            })
+        };
+
+        let howLongToSleep = async function () {
+            // 在这里使用起来就像同步代码那样直观
+            console.time();
+            console.log('start');
+            await sleep(3000);  //sleep 为一个执行需要耗费 3s 的函数
+            console.log('中间');
+            await sleep(3000); 
+            console.log('end');
+        };
+        howLongToSleep();//start三秒之后是'中间'，再过三秒之后是'end'
+
+async 表示这是一个 async 函数，而 await 只能在这个函数里面使用。
+
+await 表示在这里等待 await 后面的操作执行完毕，再执行下一句代码。
+
+await 后面紧跟着的最好是一个耗时的操作或者是一个异步操作(当然非耗时的操作也可以的，但是就失去意义了)。
+其实在使用 async/await 的时候最简单的场景就是当你需要执行一个耗时操作时或者必须为异步操作时就可以直接上，使用 async 来执行你的函数，在这个函数内部 使用 await 关键字来达到异步执行的最终目的：**执行完毕（异步执行）了，可以运行下一行代码了！**
+看下面的题目：请在【代码书写处】写上代码使其得到我们想要的输出
+
+       const timeout = ms =>
+            new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    resolve();
+                    }, ms);
+                });
+                const ajax1 = () =>
+                    timeout(2000).then(() => {
+                        console.log("1");
+                        return 1;
+                    });
+                const ajax2 = () =>
+                    timeout(1000).then(() => {
+                       console.log("2");
+                        return 2;
+                    });
+                const ajax3 = () =>
+                    timeout(2000).then(() => {
+                        console.log("3");
+                        return 3;
+                    });
+                const mergePromise = (ajaxArray) =>{
+
+                   //1,2,3 done [1,2,3]
+                    //【代码书写处】
+                    } 
+
+                mergePromise([ajax1, ajax2, ajax3]).then(data => {
+                    console.log("done");
+                    console.log(data); // data 为 [1, 2, 3]
+                })
+
+解题思路：使用async和await，await使得ajax1执行完之后才会执行下一个ajax2，ajax2执行完之后才会执行ajax3.把每次返回的结果都压到栈result里面。
+
+
+                const mergePromise = (ajaxArray) =>{
+                    async function test(){
+                        let result = [];
+                        for(let i of ajaxArray){
+                            let item = await i();
+                            result.push(item);
+                        }
+                        return result;
+                    }
+                    return test();
+              } 
+还可以使用另外一种方法，就是让把递归拉平的思路,也能得到想要的结果
+
+            const mergePromise = async function(ajaxArray){
+                let data = [];
+                while(ajaxArray[0]){
+                    await ajaxArray[0]().then(res => data.push(res),ajaxArray.shift())
+                    }
+                return data;
+                }
+
+#### 同步队列异步队列
+
+                $('#test').click(function(argument) {
+                    console.log(1);
+                });
+                setTimeout(function() {
+                    console.log(2);
+                }, 0);
+                while (true) {
+                console.log(Math.random());
+                }
+请问点击<buttion id=“test”></button>会有反应么？为什么？能解决么？
+回答：没有反应。因为while(true)同步队列里面一直在循环。并没有轮到异步队列。
+##### Concurrent.Thread.js
+http://www.cnblogs.com/0banana0/archive/2011/06/01/2067402.html
+Concurrent.Thread.js是一个日本人开发的，用来让javascript也进行多线程开发的包，可以让我们将耗时的任务利用前端来模拟多线程。有了Concurrent.Thread，就有可能自如的将执行环境在线程之间进行切换。
+首先要下载这个库，然后再引入。然后我们就可以修改成下面这个样子。
+
+    <body>
+        <div id = "btn">点击我</div>
+        <script src = "Concurrent.Thread.js"></script>
+        <script>
+            var btn = document.getElementById('btn');
+            Concurrent.Thread.create(function(){
+                btn.onclick = function(){
+                alert('ksjsjsjj');
+                }
+              /*下面有一段特别复杂的函数*/
+            while (true) {
+                console.log(Math.random());
+                }
+            });
+        </script>
+    </body>
+
+##### Web Worker
+http://www.ruanyifeng.com/blog/2018/07/web-worker.html
+###### 基本用法
+* 主线程
+主线程采用 `new`命令，调用`Worker()`构造函数，新建一个` Worker` 线程。
+
+      var worker = new Worker('work.js');
+   `Worker()`构造函数的参数是一个脚本文件，该文件就是 Worker 线程所要执行的任务。由于 Worker 不能读取本地文件，所以这个脚本必须来自网络。如果下载没有成功（比如404错误），Worker 就会默默地失败。
+
+  然后，主线程调用`worker.postMessage()`方法，向 Worker 发消息。
+
+        worker.postMessage('Hello World');
+        worker.postMessage({method: 'echo', args: ['Work']});
+  `worker.postMessage()`方法的参数，就是主线程传给 `Worker` 的数据。它可以是各种数据类型，包括二进制数据。
+
+  接着，主线程通过`worker.onmessage`指定监听函数，接收子线程发回来的消息。
+
+      worker.onmessage = function (event) {
+        console.log('Received message ' + event.data);
+        doSomething();
+      }
+
+       function doSomething() {
+        // 执行任务
+        worker.postMessage('Work done!');
+      }
+  上面代码中，事件对象的data属性可以获取 Worker 发来的数据。
+Worker 完成任务以后，主线程就可以把它关掉。
+
+       worker.terminate();
+
+###### 应用在我们的题目上
+   在同一个目录下面新建task.js文件
+
+      while(true){
+          postMessage(Math.random());
+          //postMessage后面是要运行的子线程
+      }
+主线程文件：
+
+    <body>
+        <div id = "btn">点击我</div>
+        <script>
+            var btn = document.getElementById('btn');
+                btn.onclick = function(){
+                alert('ksjsjsjj');
+                }
+            var worker = new Worker('task.js');
+            worker.onmessage = function(){
+                console.log(event.data);
+            }
+        </script>
+    </body>
+注意：Worker 线程无法读取本地文件，即不能打开本机的文件系统（file://），它所加载的脚本，必须来自网络。所以不能直接在本地跑。
+
+#### 按值引用按地址引用
+
+                var s = [];
+                var arr = s;
+                for (var i = 0; i < 3; i++) {
+                    var pusher = {
+                        value: "item"+i
+                    },tmp;
+                    if (i !== 2) {
+                        tmp = []
+                        pusher.children = tmp
+                    }
+                    arr.push(pusher);
+                    arr = tmp;
+                }
+                console.log(s[0]);
+最后输出结果是[value:item0,children:[value:item1,children:[value:item2]]]
+为什么呢？
+模拟指针移动。
+1. 当i = 0时，arr和s指向同一个地址,tmp自己指向一个地址。pusher.children指向tmp。
+此时，push = {value:item0,children:tmp};
+2. 当i = 1时，arr和tmp指向同一个地址。此时的arr等于pusher也就是value:item1,children:tmp。
+3. 当i = 2时，arr和tmp还是指向同一个地址，此时的arr等于pusher也就是value:item2
+
+画图：
+![image.png](https://upload-images.jianshu.io/upload_images/7728915-208f540f2def6506.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)

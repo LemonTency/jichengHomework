@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>thread</title>
+    <script src = "Concurrent.Thread.js"></script>
+</head>
+<body>
+    <div id = "btn">点击我</div>
+    <script>
+        var btn = document.getElementById('btn');
+        Concurrent.Thread.create(function(){
+            btn.onclick = function(){
+            alert('ksjsjsjj');
+            }
+        /*下面有一段特别复杂的函数*/
+        while (true) {
+            console.log(Math.random());
+            }
+        });
+        //create是另外开启一个线程。
+        //Concurrent.Thread.js利用setTimeout和setInterval方法来模拟线程的概念
+    </script>
+</body>
+</html>
