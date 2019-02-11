@@ -1,12 +1,14 @@
 {% extends './layout.html' %}
 
-{% block title %}新闻系统 {%endblock%}
+{% block title %}新闻系统{%endblock%}
 
 {% block head %}
-<link rel = "stylesheet" href="/styles/index.css">
+<link rel="stylesheet" type="text/css" href="/styles/index.css" /> 
 {% endblock %}
 
 {% block content %}
-<p>This is just an awesome page.</p>
-<p>{{data}}</p>
+    {% include "../components/news/list.html" %}
+{% endblock %}
+{% block scripts %}
+<script src = "/scripts/index.js"></script>
 {% endblock %}
