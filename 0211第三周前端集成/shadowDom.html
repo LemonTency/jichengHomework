@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>shadowDom</title>
+</head>
+<body>
+    <div id="test"></div>
+    <div id="hostElement"></div>
+    <script>
+        const div = document.getElementById('test') 
+        const shadowRoot = div.createShadowRoot() 
+        const span = document.createElement('span') 
+
+        span.textContent = 'hello world' 
+        shadowRoot.appendChild(span)
+
+
+        const shadow = document.querySelector('#hostElement').attachShadow({mode: 'open'});
+        shadow.innerHTML = '<p>我是影子dom</p>';
+        //加上样式
+        shadow.innerHTML += '<style>p { color: red; }</style>';
+
+    </script>
+
+</body>
+</html>
