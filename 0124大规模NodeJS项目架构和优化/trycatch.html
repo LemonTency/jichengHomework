@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+        <p>请输入 5 和 10 之间的一个数:</p>
+ 
+        <input id="demo" type="text">
+        <button type="button" onclick="myFunction()">检测输入</button>
+        <p id="message"></p>
+         
+        <script>
+        function myFunction() {
+            var message, x;
+            message = document.getElementById("message");
+            message.innerHTML = "";
+            x = document.getElementById("demo").value;
+            try { 
+                if(x == "")  throw "为空";
+                if(isNaN(x)) throw "不是一个数字";
+                if(x > 10)   throw "太大了";
+                if(x < 5)    throw "太小了";    
+            }
+            catch(err) {
+                message.innerHTML = "输入的值 " + err;
+            }
+        }
+        </script>
+</body>
+</html>
