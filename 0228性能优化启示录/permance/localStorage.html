@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+
+<script>
+    //需求是什么？
+    //假设我们需要请求a.xx3322.js
+    //在本地存储localstorage存储key为a.js,对应的value是a.xx3322.js
+    //key为a.xx3322.js,对应的value就是我们的目标js代码
+    //所以就不需要<script src = "a.xx3322.js">
+    //可以用下面代码来实现
+
+    //webpack打包出来
+    var res = {
+        "a.js":"a.xx3322.js"
+    }
+
+    function activePage(){
+        for(let item of res){
+            const js = localStorage[item.key]
+            //如果本地没有发请求，再发一次请求缓存
+            //本地存在的话，就要判断一下当前的版本号
+            //更新我们的资源
+            if(js == item.value){
+                eval(js)
+            }else{
+                fetch(item.value).then(function(res){
+                    localStorage['a.js'] = "a.xx3322.js";
+                    localStorage['a.xx3322.js'] = res;
+                })
+            }
+        }
+
+    }
+    activePage();
+</script>
+</body>
+</html>
