@@ -197,7 +197,7 @@ http://es6.ruanyifeng.com/#docs/destructuring
       for (let [,value] of map) {
         // ...
     }
-#####模板字符串
+##### 模板字符串
 
         var a = 'hello';
         var b = "world";
@@ -209,7 +209,7 @@ http://es6.ruanyifeng.com/#docs/destructuring
         }
 value是模板字符串里面的值。
 
-#####数组对象
+##### 数组对象
 
         const arr = "888";
         const arr1 = ['花','大树',...arr];
@@ -281,8 +281,119 @@ Object.setPrototypeOf()方法设置一个指定的对象的原型 ( 即, 内部[
         sunday.getEat()//sunday.getEat() is not a function
         sunday.getDrink();//喝
 
-#####函数
+##### 函数
 箭头函数
+作用：
+1. 让代码更加简洁
+2. 绑定了父级的作用域
+让我们看看这个困扰了我很久的代码
+
+        const luke = {
+            id: 2,
+            say: function(){
+                setTimeout(function(){
+                    console.log(this.id)
+                },50)
+            },
+            sayWithThat: function(){
+                let that = this
+                setTimeout(function(){
+                    console.log(that.id)
+                },500)
+            },
+            sayWithArrow: function(){
+                setTimeout(() =>{
+                    console.log(this.id)
+                },1000)
+            },
+            sayWithGlobalArrow: ()=>{
+                setTimeout(()=>{
+                    console.log(this.id)
+                },2000)
+            }
+        }
+        luke.say() //undefined 因为setTimeout运行时this指向的是window
+        luke.sayWithThat() //2 保存了定义时的that
+        luke.sayWithArrow() //2  箭头函数指向的是父级的作用域，也就是指向luke
+        luke.sayWithGlobalArrow() //undefined  注意这里是两个箭头函数
+刚开始遇到了一个问题：
+
+        sayWIthArrow: ()=>{
+            setTimeout(function(){
+                console.log(this.id)
+            })
+        }
+本来预想的是2，但是输出结果却是undefined，为啥？？？
+
+因为我把方法写在了对象里，而对象的括号是不能封闭作用域的。所以此时的this还是指向全局对象。
+所以，通过以上的错误可以提醒我们，**最好不要用箭头函数作为对象的方法。**
+
+然后我写了几个相关函数测试一下：当对象的函数用箭头函数的话会怎么样？
+
+        //对象的函数最好不要用箭头函数
+        let person = {
+            a:2,
+            say:()=>{
+                console.log(this.a)
+            },
+            sayhh:function(){
+                console.log(this.a)
+            }
+        }
+        person.say() //undefined
+        person.sayhh() //2
+可以看到，对象中的方法如果是箭头函数的话，他的作用域就会变成全局的。不然就是person。
+
+
+    {var factory = function() {
+    this.a = 'a';
+    this.b = 'b';
+    this.c = {
+      a: 'a+',
+      b: function() {
+        return this.a
+       }
+      }
+     }
+
+    console.log(new factory().c.b());    //a+
+    };
+
+    {
+    var factory = function() {
+    this.a = 'a';
+    this.b = 'b';
+    this.c = {
+      a: 'a+',
+      b: () => {
+        return this.a
+      }
+    }
+    }
+    console.log(new factory().c.b());//a
+    }
+还有这个例子，也让我困扰了很久，先看第一种情况，因为是c调用的b，所以this指向c，取得的a值就是a+
+第二种情况，注意啊！this.c是个对象啊！{ }是不能封闭作用域的，函数才可以，所以this还是会指向外层的factory这个函数，所以是a
+
+
+先让我们看看MDN上面的一个示例吧！
+
+    //创建一个含有bar方法的obj对象
+    //bar返回一个函数
+    //这个函数返回this
+    //这个this永久绑定到了它外层函数的this，也就是obj
+    let obj = {
+        bar:function(){
+            var x = (()=> this);
+        return x;
+        }
+    }
+
+    //作为obj对象的一个方法来调用bar,把它的this绑定到obj上
+    var fn = obj.bar();
+    //如果是非箭头函数的话，按照fn()这样再去调用的话this是指向全局的
+    //但是箭头函数早已经绑定了obj
+    console.log(fn() === obj);
 
 #####Generator 函数
 形式上，Generator 函数是一个普通函数，但是有两个特征。一是，function关键字与函数名之间有一个星号；二是，函数体内部使用yield表达式，定义不同的内部状态（yield在英语里的意思就是“产出”）
@@ -368,7 +479,14 @@ override修饰器检查子类的方法，是否正确覆盖了父类的同名方
 
 
 #####Symbol(惟一的）
+Symbol 值可以显式转为字符串。Symbol 值不能与其他类型的值进行运算，会报错!
+    
+    let sym = Symbol('My symbol');
 
+    String(sym) // 'Symbol(My symbol)'
+    sym.toString() // 'Symbol(My symbol)'
+
+s1和s2是两个 Symbol 值。如果不加参数，它们在控制台的输出都是Symbol()，不利于区分。有了参数以后，就等于为它们加上了描述，输出的时候就能够分清，到底是哪一个值。
         // 没有参数的情况
         let s1 = Symbol();
         let s2 = Symbol();
@@ -423,15 +541,119 @@ override修饰器检查子类的方法，是否正确覆盖了父类的同名方
       triangle: Symbol()
     };
 
+##### Iterator遍历器（迭代器）
+下面代码定义了一个遍历器：
 
+    //生成器函数
+    function makeIterator(arr){
+        let nextIndex = 0
 
+        //return一个迭代器对象
+        return{
+            next:()=>{
+                if(nextIndex < arr.length){
+                    return{value: arr[nextIndex++],done:false}
+                }else{
+                    return {done:true}
+                }
+            }
+        }
+    }
 
+    const it = makeIterator(['吃饭','睡觉','打豆豆'])
+    console.log(1,it.next().value);  // 1 吃饭
+    console.log(2,it.next().value);  // 2 睡觉
+    console.log(3,it.next().value);  // 3 打豆豆
+    console.log(4,it.next().value);  // 4 undefined
+请记住这个简陋的遍历器。
+**Iterator遍历器和Generator函数的关系是很密切的**
 
+##### Generator 函数（生成器）
+形式上，Generator 函数是一个普通函数，但是有两个特征。一是，function关键字与函数名之间有一个星号；二是，函数体内部使用yield表达式，定义不同的内部状态（yield在英语里的意思就是“产出”）
+看看跟上面有点类似的例子：
 
+    //generator
+    function* makeIterator(arr){
+        for(let i = 0; i < arr.length; i++){
+            yield arr[i]
+        }
+    }
 
+    const gen =  makeIterator(['吃饭','睡觉','打豆豆'])
+    console.log(1,gen.next().value);  // 1 吃饭
+    console.log(2,gen.next().value);  // 2 睡觉
+    console.log(3,gen.next().value);  // 3 打豆豆
+    console.log(4,gen.next().done);  // 4 true  
+与上面例子比较之后，我们发现了什么
+**总结：生成器就是为更方便使用迭代器，它的特点就是简化掉迭代器（Interator）的组建过程（创建过程）**
 
+再看看另一个例子
 
+       let zty = function*(){
+           yield "哈哈";
+           yield "呵呵";
+       }
+       const result = zty();
+       console.log(result.next());
+       //{value: "哈哈", done: false}
+       console.log(result.next());
+       //{value: "呵呵", done: false}
+       console.log(result.next());
+      //{value: undefined, done: true}
+Generator 函数的调用方法与普通函数一样，也是在函数名后面加上一对圆括号。不同的是，调用 Generator 函数后，该函数并不执行，下一步，必须调用遍历器对象的next方法，使得指针移向下一个状态。
+**ES6 没有规定，function关键字与函数名之间的星号，写在哪个位置。这导致下面的写法都能通过。**
 
+##### co库执行Promise和generator function
+npm install co -D
+
+    const co = require('co');
+    const fetch = require('node-fetch')
+
+    co(function *(){
+        const res = yield fetch('https://api.douban.com/v2/movie/1291843')
+        const movie = yield res.json()
+        const summary = movie.summary
+        
+        console.log(summary)
+    })
+
+用同步的方式来执行异步的过程。
+**co让genrator实现了自动执行，不需要手动调用next,而且实现的效果就是当第一句代码执行完的时候才会执行第二句，当第二句执行完的时候才能执行第三句。**
+![image.png](https://upload-images.jianshu.io/upload_images/7728915-c51a71183ac93db6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+    //自己来实现一个简易的co
+    function run(generator){
+        //调用generator来生成一个迭代器
+        const iterator = generator()
+        //执行第一个yield后面的内容
+        const it = iterator.next()
+        //fetch得到了一个promise
+        const promise = it.value
+
+        //将取得的data传入promise中
+        //继续next
+        promise.then(data => {
+            const it2 = iterator.next(data)
+            const promise2 = it2.value
+
+            promise2.then(data2 => {
+                iterator.next(data2)
+            })
+
+        })
+    }
+
+    run(function *(){
+        const res = yield fetch('https://api.douban.com/v2/movie/1291843')
+        const movie = yield res.json()
+        const summary = movie.summary
+        
+        console.log(summary)
+    })
+打印出来的结果一样。
+当然，你可以去看看co的源代码！！
+小tips：co库中yield后面不能跟着字符串或者布尔值
+只能跟着function, promise, generator, array, or object
 
 
 

@@ -10,3 +10,9 @@ var f = function f() {
 };
 
 ;
+
+var controller = function controller(path) {
+  return function (target) {
+    return target.prototype[0] = path;
+  };
+};
