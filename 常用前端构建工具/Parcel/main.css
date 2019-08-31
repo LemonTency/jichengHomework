@@ -1,0 +1,8 @@
+.main {
+
+    width: 400px;
+    height: 400px;
+    /* 引用一张图片 */
+    background: url('./images/background.jpg');
+    color: red;
+  }

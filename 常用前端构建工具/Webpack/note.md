@@ -211,3 +211,192 @@ https://www.npmjs.com/package/extract-text-webpack-plugin
 同时也可以配置一些文件可以压缩一些文件不压缩。
 
 三、Webpack2&3核心技巧
+
+现在，我们就将我们上面说的知识点都一一回顾一下吧！来进行实操吧！
+1. 新建一个文件夹叫webpackTest
+2. 文件夹里面新建webpack.config.js和package.json，然后npm init
+3. 使用npm安装webpack
+4. 新建了index.es（es6文件）和index.less，使用webpack来进行构建
+5. 同时在index.html里面引入刚刚输出的index.js和index.css（当前文件目录如下）
+
+
+    <!DOCTYPE html>
+    <html lang="en">
+      <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>Webpack</title>
+        <link rel="stylesheet" href="./styles/index.css" />
+      </head>
+      <body>
+        <h1>hello webpack</h1>
+        <script type="text/javascript" src="./scripts/index.bundle.js"></script>
+      </body>
+    </html>
+
+![image.png](https://upload-images.jianshu.io/upload_images/7728915-4bc7a76182182188.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+6. 接下来就是万众瞩目的webpack.config.js的配置啦！
+entry和output分别代表入口资源和output代表编译后的资源。
+
+        entry: {
+            index: './assets/scripts/index.es'
+        },
+        output: {
+          path: path.join(__dirname,'./assets/'),
+          publicPath: './',
+          filename: 'scripts/[name].js',
+        },
+    然后在module配置不同文件的编译loader
+[https://www.webpackjs.com/loaders/less-loader/](https://www.webpackjs.com/loaders/less-loader/)
+**在这里，关于less-loader的使用，有地方是需要特别注意的：**
+
+        {
+          //配置编译less文件的规则
+          //i表示不区分大小写
+          //如果直接使用less-loader的话，css会打到js文件里面去
+          test: /\.less$/i,
+          use: [{
+            loader: "style-loader"
+        }, {
+            loader: "css-loader"
+        }, {
+            loader: "less-loader"
+        }]
+        }
+    如果直接这样去配置编译的话也是没有问题的，但是这样子我们的样式表文件会一起打包在js文件里面，打印出来之后只有一个index.bundle.js的文件，如果我们想要js文件和css文件分开来要怎么处理呢？
+这个时候就需要[ExtractTextPlugin](https://github.com/webpack-contrib/extract-text-webpack-plugin)这个插件了。
+
+    具体使用：
+
+        const ExtractTextPlugin = require("extract-text-webpack-plugin");
+        const extractLess = new ExtractTextPlugin({
+          filename: "[name].css",
+          disable: process.env.NODE_ENV === "development"
+        });
+
+        module.exports = {
+             ...
+            module: {
+              rules: [{
+                  test: /\.less$/,
+                  use: extractLess.extract({
+                      use: [{
+                          loader: "css-loader"
+                      }, {
+                          loader: "less-loader"
+                      }],
+                      // use style-loader in development
+                      fallback: "style-loader"
+                  })
+              }]
+          },
+          plugins: [
+              extractLess
+          ]
+        };
+
+    但是在执行webpack打包的时候却报错了
+ Chunk.entrypoints: Use Chunks.addGroup instead
+如果出现了这个问题，说明装的webpack一定是4.0版本的，看了一下package.json，webpack确实是4.0版本以上的。在这里的话我直接安装了webpack的3.6.0版本，就可以顺利打包了。
+![image.png](https://upload-images.jianshu.io/upload_images/7728915-f49a1df252d67b37.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+这个时候就可以看到打包出来的index.bundle.js文件和index.css文件啦！
+7. 以为这样就结束了吗？？并不是的，接下来要装大家都很熟悉的html-webpack-plguin了。为什么要使用它呢？因为像我们第5步那样手动引入这样的文件太傻了，而且如果是将生成的css,js文件后面加上哈希值（解决缓存问题），我们预先在html中就无法引入了。**html-webpack-plugin可以根据指定的源模板文件来生成编译后的html文件，同时还可以加入hash等解决缓存的问题。**
+[https://www.jianshu.com/p/0eb9487cf765](https://www.jianshu.com/p/0eb9487cf765)
+所以，现在把我们的index.html删掉，在webpack.config.js中进行配置。建立一个没有引用其他js文件和css文件的index.html。
+在plugin项中进行配置：
+
+        new HtmlWebpackPlugin({
+          filename: 'index.html',
+          template: './index.html',
+          inject: true
+        })
+
+
+在这里遇到了一个问题
+![image.png](https://upload-images.jianshu.io/upload_images/7728915-e07b3af366458e25.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+    所以是需要一个index.html
+
+8. 关于代码压缩和删除无用代码
+
+    代码压缩，使用webpack自带的压缩工具就行了
+
+          new webpack.optimize.UglifyJsPlugin({
+            compress:{
+              warnings: true
+            },
+            output: {
+              comments: false
+            },
+            sourceMap: false
+          })
+    记住进行代码压缩的同时，要将es2015的module给关了，才会删除掉没有用的函数
+9. 此时我们的webpack.config.js是这样子的
+
+        'use strict'
+        const path = require('path')
+        const ExtractTextPlugin = require("extract-text-webpack-plugin");
+        const HtmlWebpackPlugin = require("html-webpack-plugin")
+        const webpack = require("webpack")
+
+        const extractLess = new ExtractTextPlugin({
+          filename: "[name].css",
+          disable: process.env.NODE_ENV === "development"
+        });
+
+        module.exports = {
+          entry: {
+            'index': './assets/scripts/index.es'
+          },
+          output: {
+            path: __dirname,
+            publicPath: './',
+            filename: 'scripts/[name].js',
+          },
+          module: {
+            rules: [
+              {
+                test: /\.es$/,
+                loader: 'babel-loader',
+                options:{
+                  "presets": [
+                    ["es2015",{
+                    module:false
+                  }]
+                  ,"stage-0"]
+                }
+              },
+              {
+                test: /\.less$/,
+                use: extractLess.extract({
+                  use: [{
+                      loader: "css-loader"
+                  }, {
+                      loader: "less-loader"
+                  }],
+                  // use style-loader in development
+                  fallback: "style-loader"
+              })
+              }
+            ]
+          },
+        plugins:[
+          extractLess,
+          new HtmlWebpackPlugin({
+            filename: 'index.html',
+            template: 'index.html',
+            inject: true
+          }),
+          new webpack.optimize.UglifyJsPlugin({
+            compress:{
+              warnings: true
+            },
+            output: {
+              comments: false
+            },
+            sourceMap: false
+          })
+        ]
+        }
+10. webpack3的code splitting也是很好玩的，下次再研究研究
