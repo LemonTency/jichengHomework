@@ -1,5 +1,5 @@
-import './components/say-something.js';
-import './components/button.js';
+import './components/hello-world.js';
+import './components/button'
 
 const template = document.createElement('template');
 
@@ -11,13 +11,28 @@ template.innerHTML = `
   </style>
 
   <div>
-    <h1>Web Components with Webpack Starter Kit</h1>
+    <hello-world
+      title="2019前端面试技巧"
+      text="掌握最新面试技巧，面试题，让你在前端面试中脱颖而出。"
+      img="url(http://img.mukewang.com/595228110001155208000480.jpg)"
+    ></hello-world>
+    <hello-world
+      title="一气呵成！Python开发一站式学习"
+      text="从入门到开发，学习 好玩 好用 好未来的Python语言。"
+      img="url(http://img.mukewang.com/58f9c48d00019e1a08000480.jpg)"
+    ></hello-world>
+    <hello-world
+      title="站上微信小程序风口，实现职业华丽转身"
+      text="入门技能+项目开发，逐步深入学习微信小程序开发！"
+      img="url(http://img.mukewang.com/58f9cb2e000191ff08000480.jpg)"
+    ></hello-world>
+    <hello-world
+      title="Java SSM框架快速入门到精通"
+      text="准备了多个项目案例带你深入学习Java SSM框架，先技术，载思想，实战出真知。"
+      img="url(http://img.mukewang.com/595228110001155208000480.jpg)"
+    ></hello-world>
 
-    Text: <input type="text" />
-
-    <say-something></say-something>
-    <say-something color="red"></say-something>
-    <my-button label="click me"></my-button>
+    <my-button></my-button>
   </div>
 `;
 
@@ -28,19 +43,8 @@ class App extends HTMLElement {
     this._shadowRoot = this.attachShadow({ mode: 'open' });
     this._shadowRoot.appendChild(template.content.cloneNode(true));
 
-    this.$input = this._shadowRoot.querySelector('input');
-    this.$input.addEventListener('input', this._handleChange.bind(this));
-
-    this.$allSaySomething = this._shadowRoot.querySelectorAll('say-something');
-  }
-
-  _handleChange() {
-    this.$allSaySomething.forEach(element => {
-      element.setAttribute('text', this.$input.value)
-    });  
-    document
-    .querySelector('my-button')
-    .addEventListener('onClick', value => console.log(value));
+    //获取helloWorldTemplate节点之后，克隆他所有子元素。
+    //因为可能有多个自定义元素的实例，这个模板还要留给其他实例使用，所以不能直接移动它的子元素。
   }
 
 }

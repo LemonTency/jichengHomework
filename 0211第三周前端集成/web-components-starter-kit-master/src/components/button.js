@@ -48,8 +48,6 @@ template.innerHTML = `
 
       this.$button = this._shadowRoot.querySelector('button');
 
-      //外面和里面同时监听，里面的先生效？
-      //最好还是在外面进行监听
       this.$button.addEventListener('click', () => {
         this.dispatchEvent(
           new CustomEvent('onClick', {

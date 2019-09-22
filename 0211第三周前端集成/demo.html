@@ -6,7 +6,6 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Document</title>
   </head>
-  <body>
   <hello-world
     title="2019前端面试技巧"
     text="掌握最新面试技巧，面试题，让你在前端面试中脱颖而出。"
@@ -74,13 +73,14 @@
       <a class="detail">查看详情</p>
     </div>
   </template>
+  <body>
     <script>
       //UserCard是自定义元素的类，这个类继承于HTMLElement，所以具有HTML元素的特性
 
       class HelloWorld extends HTMLElement {
         constructor() {
           super()
-          var shadow = this.attachShadow({ mode: 'open' })
+          var shadow = this.attachShadow({ mode: 'closed' })
 
           //获取helloWorldTemplate节点之后，克隆他所有子元素。
           //因为可能有多个自定义元素的实例，这个模板还要留给其他实例使用，所以不能直接移动它的子元素。

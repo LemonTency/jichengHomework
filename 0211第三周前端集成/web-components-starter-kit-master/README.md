@@ -1,13 +1,13 @@
 # Web Components with Webpack Starter Kit
 
-[![Build Status](https://travis-ci.org/rwieruch/web-components-starter-kit.svg?branch=master)](https://travis-ci.org/rwieruch/web-components-starter-kit) [![Slack](https://slack-the-road-to-learn-react.wieruch.com/badge.svg)](https://slack-the-road-to-learn-react.wieruch.com/) [![Greenkeeper badge](https://badges.greenkeeper.io/rwieruch/web-components-starter-kit.svg)](https://greenkeeper.io/)
+文件来自于 https://github.com/rwieruch/web-components-starter-kit
 
-Starter Kit for Web Components with Webpack as application bundler.
+在 web-components-starter-kit 的基础上进行了一些修改。感谢 rwieruch
 
 ## Installation
 
-* `git clone git@github.com:rwieruch/web-components-starter-kit.git`
-* cd web-components-starter-kit
-* npm install
-* npm start
-* visit `http://localhost:8080`
+- 下载
+- cd web-components-starter-kit
+- npm install
+- npm start
+- visit `http://localhost:8080`
