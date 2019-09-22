@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <user-card
+    image="https://semantic-ui.com/images/avatar2/large/kristy.png"
+    name="User Name"
+    email="yourmail@some-email.com"
+  ></user-card>
+  <button is="button-hello">hello world</button>
+  <template id="userCardTemplate">
+    <style>
+      :host {
+        display: flex;
+        align-items: center;
+        width: 450px;
+        height: 180px;
+        background-color: #d4d4d4;
+        border: 1px solid #d5d5d5;
+        box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
+        border-radius: 3px;
+        overflow: hidden;
+        padding: 10px;
+        box-sizing: border-box;
+        font-family: 'Poppins', sans-serif;
+      }
+      .image {
+        flex: 0 0 auto;
+        width: 160px;
+        height: 160px;
+        vertical-align: middle;
+        border-radius: 5px;
+      }
+      .container {
+        box-sizing: border-box;
+        padding: 20px;
+        height: 160px;
+      }
+      .container > .name {
+        font-size: 20px;
+        font-weight: 600;
+        line-height: 1;
+        margin: 0;
+        margin-bottom: 5px;
+      }
+      .container > .email {
+        font-size: 12px;
+        opacity: 0.75;
+        line-height: 1;
+        margin: 0;
+        margin-bottom: 15px;
+      }
+      .container > .button {
+        padding: 10px 25px;
+        font-size: 12px;
+        border-radius: 5px;
+        text-transform: uppercase;
+      }
+    </style>
+    <img class="image" />
+    <div class="container">
+      <p class="name"></p>
+      <p class="email"></p>
+      <button class="button">Follow John</button>
+    </div>
+  </template>
+  <body>
+    <script>
+      //UserCard是自定义元素的类，这个类继承于HTMLElement，所以具有HTML元素的特性
+
+      class UserCard extends HTMLElement {
+        constructor() {
+          super()
+          var shadow = this.attachShadow({ mode: 'closed' })
+
+          //获取userCardTemplate节点之后，克隆他所有子元素。
+          //因为可能有多个自定义元素的实例，这个模板还要留给其他实例使用，所以不能直接移动它的子元素。
+          var templateElem = document.getElementById('userCardTemplate')
+          var content = templateElem.content.cloneNode(true)
+          content
+            .querySelector('img')
+            .setAttribute('src', this.getAttribute('image'))
+          content.querySelector(
+            '.container>.name'
+          ).innerText = this.getAttribute('name')
+          content.querySelector(
+            '.container>.email'
+          ).innerText = this.getAttribute('email')
+
+          shadow.appendChild(content)
+        }
+      }
+      class ButtonHelloElement extends HTMLButtonElement {
+        constructor() {
+          super()
+          this.addEventListener('click', () => {
+            alert('hello world')
+          })
+        }
+      }
+
+      //使用原生的customElements,define()方法，将<user-card>与UserCard相关联
+      window.customElements.define('user-card', UserCard)
+      customElements.define('button-hello', ButtonHelloElement, {
+        extends: 'button'
+      })
+    </script>
+  </body>
+</html>

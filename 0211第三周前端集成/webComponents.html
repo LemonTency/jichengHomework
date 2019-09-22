@@ -1,0 +1,62 @@
+<my-dropdown
+  label="Dropdown"
+  option="option2"
+  option='{"option1":{"label":"Option1"},"option2":{"label":"Option2"}'
+>
+</my-dropdown>
+
+<script>
+  //template在web component中定义他的结构和样式起着重要的作用
+  //如下所示
+  const template = document.createElement('template')
+
+  template.innerHTML = `
+
+  <style>
+
+    .container{
+      padding: 8px
+    }
+
+    button {
+      display: block;
+      overflow: hidden;
+      position: relative;
+      padding: 0 16px;
+      font-size: 16px;
+      font-weight: bold;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      cursor: pointer;
+      outline: none;
+      width: 100%;
+      height: 40px;
+      box-sizing: border-box;
+      border: 1px solid #a1a1a1;
+      background: #ffffff;
+      box-shadow: 0 2px 4px 0 rgba(0,0,0, 0.05), 0 2px 8px 0 rgba(161,161,161, 0.4);
+      color: #363636;
+      cursor: pointer;
+    }
+    
+  </style>
+
+  <div>
+    <button>label</button>
+  </div>
+  `
+
+  //Button 继承于HTMLElement,具有HTML元素的一些属性，同时也拥有生命周期，在相对应的时期可以执行一些回调
+  class Button extends HTMLElement {
+    constructor() {
+      super()
+
+      //shadow Dom用于封装CSS,HTML,JS，对外界隐藏起来，这是可以设置的。
+      this._shadowRoot = this.attachShadow({ mode: 'open' })
+      this._shadowRoot.appendChild(template.content.cloneNode(true))
+    }
+  }
+
+  //my-button是我们使用web component时的名字。<my-button></my-button>
+  window.customElement.define('my-button', Button)
+</script>

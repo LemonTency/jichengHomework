@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+  <hello-world
+    title="2019前端面试技巧"
+    text="掌握最新面试技巧，面试题，让你在前端面试中脱颖而出。"
+    img="url(http://img.mukewang.com/595228110001155208000480.jpg)"
+  ></hello-world>
+  <hello-world
+    title="一气呵成！Python开发一站式学习"
+    text="从入门到开发，学习 好玩 好用 好未来的Python语言。"
+    img="url(http://img.mukewang.com/58f9c48d00019e1a08000480.jpg)"
+  ></hello-world>
+  <hello-world
+    title="站上微信小程序风口，实现职业华丽转身"
+    text="入门技能+项目开发，逐步深入学习微信小程序开发！"
+    img="url(http://img.mukewang.com/58f9cb2e000191ff08000480.jpg)"
+  ></hello-world>
+  <hello-world
+    title="Java SSM框架快速入门到精通"
+    text="准备了多个项目案例带你深入学习Java SSM框架，先技术，载思想，实战出真知。"
+    img="url(http://img.mukewang.com/595228110001155208000480.jpg)"
+  ></hello-world>
+  <template id="helloWorldTemplate">
+    <style>
+      .container {
+        background-size: 100%;
+        float: left;
+        width: 475px;
+        height: 124px;
+        border-radius: 6px;
+        color: #fff;
+        margin: 0 10px 36px 20px;
+        box-sizing: border-box;
+        padding: 24px 32px 0;
+      }
+      .detail {
+        margin-top: 8px;
+        font-size: 12px;
+        font-weight: 200;
+        color: rgba(240, 20, 20, 0.6);
+        line-height: 16px;
+      }
+      .title {
+        font-size: 20px;
+        line-height: 24px;
+        margin: 2px;
+        color: rgba(255, 255, 255, 0.8);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .text {
+        font-size: 12px;
+        line-height: 24px;
+        color: rgba(255, 255, 255, 0.6);
+        font-weight: 200;
+        margin-top: 5px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    </style>
+
+    <div class="container">
+      <p class="title"></p>
+      <p class="text"></p>
+      <a class="detail">查看详情</p>
+    </div>
+  </template>
+    <script>
+      //UserCard是自定义元素的类，这个类继承于HTMLElement，所以具有HTML元素的特性
+
+      class HelloWorld extends HTMLElement {
+        constructor() {
+          super()
+          var shadow = this.attachShadow({ mode: 'open' })
+
+          //获取helloWorldTemplate节点之后，克隆他所有子元素。
+          //因为可能有多个自定义元素的实例，这个模板还要留给其他实例使用，所以不能直接移动它的子元素。
+          var templateElem = document.getElementById('helloWorldTemplate')
+          var content = templateElem.content.cloneNode(true)
+          content.querySelector(
+            '.container'
+          ).style.backgroundImage = this.getAttribute('img')
+          content.querySelector(
+            '.container>.title'
+          ).innerText = this.getAttribute('title')
+          content.querySelector(
+            '.container>.text'
+          ).innerText = this.getAttribute('text')
+          shadow.appendChild(content)
+        }
+      }
+
+      //使用原生的customElements,define()方法，将<hello-world>与HelloWorld相关联
+      window.customElements.define('hello-world', HelloWorld)
+    </script>
+  </body>
+</html>

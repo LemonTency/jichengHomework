@@ -288,8 +288,11 @@ CI主要就是下面这个部分。
             </script>
             <button is="button-hello">hello world</button>
         </body>
+
 ![image.png](https://upload-images.jianshu.io/upload_images/7728915-c875c951173b9eec.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 点击helloworld按钮弹出警告框  helloworld
+
+相关教程：http://www.ruanyifeng.com/blog/2019/08/web_components.html
 
 2. HTML Imports 
 

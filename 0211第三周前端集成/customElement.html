@@ -1,23 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Custom Elements </title>
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Custom Elements</title>
+  </head>
+  <body>
     <script>
-        class ButtonHelloElement extends HTMLButtonElement { 
-            constructor() { 
-                super() 
-                this.addEventListener('click', () => { 
-                    alert('hello world') 
-                }) 
-            } 
-        } 
-        customElements.define('button-hello', ButtonHelloElement, { extends: 'button' }) 
+      //ButtonHelloElement就是自定义元素的类。注意，这个类的父类是HTMLButtonElement，因此继承了 HTML 元素的特性。
+      class ButtonHelloElement extends HTMLButtonElement {
+        constructor() {
+          super()
+          this.addEventListener('click', () => {
+            alert('hello world')
+          })
+        }
+      }
+      //使用浏览器原生的customElements.define()方法，告诉浏览器<button-hello>元素与这个类关联。
+      customElements.define('button-hello', ButtonHelloElement, {
+        extends: 'button'
+      })
     </script>
     <button is="button-hello">hello world</button>
-</body>
+  </body>
 </html>
