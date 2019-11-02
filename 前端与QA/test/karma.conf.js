@@ -16,6 +16,7 @@ module.exports = function(config) {
     // 需要添加的测试文件
     files: [
       "./unit/**/*.js",
+      "./src/**/*.js",
       "./unit/**/*.spec.js"
     ],
 

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>canvas2D图像绘制</title>
+</head>
+<body>
+    <canvas id="can"height="500"width="500"></canvas>
+    <script type="text/javascript">
+        var canvas = document.getElementById("can");
+        var ctx = canvas.getContext("2d");
+
+        // ctx.moveTo(100,100);
+        // ctx.lineTo(500,200);
+        // ctx.lineTo(20,0);
+        // ctx.stroke();
+
+        //画一个填充的圆
+        // ctx.fillStyle="#999";
+        // ctx.beginPath();
+        // ctx.arc(100,100,50,0*Math.PI,2*Math.PI,true);
+        // ctx.closePath();
+        // ctx.fill();
+
+        //画一个空心的圆
+        // ctx.beginPath();
+        // ctx.arc(100,100,50,0*Math.PI,2*Math.PI,true);
+        // ctx.closePath();
+        // ctx.stroke();
+
+        //画一个矩形彩带
+        var my_gradient=ctx.createLinearGradient(0,0,500,500);
+        my_gradient.addColorStop(0,"black");
+        my_gradient.addColorStop(0.25,"red");
+        my_gradient.addColorStop(0.5,"yellow");
+        my_gradient.addColorStop(0.75,"green");
+        my_gradient.addColorStop(1,"grey");
+        ctx.fillStyle=my_gradient;
+        //填充在矩形里面
+        ctx.fillRect(20,20,500,500);
+    </script>
+</body>
+</html>
