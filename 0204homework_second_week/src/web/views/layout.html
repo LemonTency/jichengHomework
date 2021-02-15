@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+    {% block head %}{% endblock %}
+    <!-- block head的位置是留给CSS -->
+</head>
+
+<body>
+    {% include '../../web/components/banner/banner.html' %}
+    {% block content %}{% endblock %}
+    <!-- block content的位置是留给html的 -->
+    {% block scripts %}{% endblock %}
+    <!-- block scripts的位置是留给js的 -->
+</body>
+
+</html>

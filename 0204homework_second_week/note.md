@@ -5,22 +5,24 @@ https://github.com/gyson/koa-simple-router
 文件结构如下：
 wigdets = components都是组件的意思。
 ![image.png](https://upload-images.jianshu.io/upload_images/7728915-a758dbe863f02126.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-然后删除掉一些不需要用到的文件夹。
-assert里面是js css目录
-config里面是配置文件
-controller里面是路由
-models和后台请求有关（通信）
-将runtime更改为middleware，放中间件
-tests文件夹存放单元测试文件。
-views存放视图文件
-web存放前端的项目（前后端分离的时候）
-widgets改为components存放组件。
+
+    然后删除掉一些不需要用到的文件夹。
+    assert里面是js css目录
+    config里面是配置文件
+    controller里面是路由
+    models和后台请求有关（通信）
+    将runtime更改为middleware，放中间件
+    tests文件夹存放单元测试文件。
+    views存放视图文件
+    web存放前端的项目（前后端分离的时候）
+    widgets改为components存放组件。
 
 2. controller里面新建index.js（路由的初始化）
 index.js就是我们的路由注册中心
 安装koa-simple-router
 npm install koa-simple-router
 将demo 里面的代码复制过去并且修改
+
 
         module.exports = (app) => {
             app.use(router(_ => {
@@ -29,34 +31,38 @@ npm install koa-simple-router
                 })
               }))
         }
-但是我们需要把一些具体的操作都独自放在一个控制器里面，用class来控制。
+
+    但是我们需要把一些具体的操作都独自放在一个控制器里面，用class来控制。
 所以，新建IndexController。
 
-    class IndexController{
-        constructor(){
 
-        }
-        actionIndex(){
-            return async(ctx, next) => {
-                ctx.body = 'hello 大家好'
+        class IndexController{
+            constructor(){
+
+            }
+            actionIndex(){
+                return async(ctx, next) => {
+                    ctx.body = 'hello 大家好'
+                }
             }
         }
-    }
 
     module.exports = IndexController;
 定义 actionIndex并将IndexController导出。
 此时，路由初始化文件可以更改为：
 
-      const router = require('koa-simple-router')
-      const IndexController = require('./IndexController');
-      const indexController = new IndexController(); 
 
-      module.exports = (app) => {
-          app.use(router(_ => {
+        const router = require('koa-simple-router')
+        const IndexController = require('./IndexController');
+        const indexController = new IndexController(); 
+
+        module.exports = (app) => {
+            app.use(router(_ => {
                 _.get('/',indexController.actionIndex())
             }))
-      }
-app.js中的代码如下：
+        }
+
+    app.js中的代码如下：
 
         const Koa = require('Koa');
         const app = new Koa();
@@ -65,7 +71,9 @@ app.js中的代码如下：
         console.log('服务已启动');
 
         app.listen(3000);
+
 启动服务，此时就可以看到
+
 ![image.png](https://upload-images.jianshu.io/upload_images/7728915-c059f1d3efaf1297.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 3. 每次更改都要手动去重启服务，很麻烦，在node中可以使用supervisor进行设置，所以我们可以直接在package.json里面的script进行设置。
@@ -202,7 +210,7 @@ ReferenceError: indexAction is not defined
     at dispatch (C:\document\frontEnd\京城一灯\note\0204homework_second_week\node_modules\_koa-compose@4.1.0@koa-compose\index.js:42:32)
     at serve (C:\document\frontEnd\京城一灯\note\0204homework_second_week\node_modules\_koa-static@5.0.0@koa-static\index.js:53:15)
 
-**error的捕获是特别重要的，最好可以打印出日志。**
+** error的捕获是特别重要的，最好可以打印出日志。**
 log4js
 https://www.npmjs.com/package/log4js
 在服务器上面也应该打印出日志。

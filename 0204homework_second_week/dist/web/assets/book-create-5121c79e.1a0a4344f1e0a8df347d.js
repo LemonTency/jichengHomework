@@ -1,0 +1,1 @@
+(self.webpackChunk_0204homework_second_week=self.webpackChunk_0204homework_second_week||[]).push([[84],{625:()=>{"use strict";new BookCreated}},0,[[625,666]]]);
