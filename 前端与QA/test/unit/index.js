@@ -1,7 +1,7 @@
-window.add = function(a){
-    if(a == 1){
-        return 1;
-    }else{
-        return a+1;
-    }
+function add(a){
+  if(a == 1){
+    return 1;
+  }else{
+    return a+1;
+  }
 }

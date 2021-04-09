@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>飞溅运动</title>
+</head>
+<body>
+    <canvas id="can" style="border: solid #8088C8 1px"></canvas>
+    <script>
+        const c = document.getElementById('can');
+        const ctx = c.getContext('2d');
+        ctx.fillStyle = '#8088C8';
+        const VIEW_WIDTH = 1000,
+        VIEW_HEIGHT = 500,
+        G = 9.8,
+        t = 50/1000,
+        ininx = 500;
+        c.width = VIEW_WIDTH;
+        c.height = VIEW_HEIGHT;
+        function init(){
+            let dataMap = new Map();
+            for(let i = 0; i < 10; i++){
+                let p = {};
+                //初始化y坐标
+                p.inity = 200;
+                p.x = 500;
+                p.y = 200;
+                //初始化模 v0
+                p.v0 = Math.random(Math.random()*10);
+                //初始化角度
+                p.angle = Math.random(Math.random()*360);
+                //初始化时间,v0+at
+                p.tx = 0;
+                p.ty = 0;
+                //水平速度
+                p.vx = p.v0 * Math.cos(p.angle / 180 * Math.PI);
+                p.vy = -p.v0 * Math.sin(p.angle / 180 * Math.PI);
+                dataMap.set(`fly${i}`,p);
+            }
+            return dataMap;
+        }
+
+        //对下面这个写法不是很懂
+        const dataMap = init();
+
+        function draw(fly){
+            ctx.beginPath();
+            ctx.arc(fly.x,fly.y,5,0,2*Math.PI,true);
+            ctx.closePath();
+            ctx.fill();
+        }
+
+        for(let i = 0; i < 10; i++){
+            //console.log(dataMap.get(`fly${i}`));
+            draw(dataMap.get(`fly${i}`))
+            //console.log(111)
+        }
+        
+    </script>
+</body>
+</html>

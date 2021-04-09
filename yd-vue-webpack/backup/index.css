@@ -1,0 +1,10 @@
+:root {
+  --unitColor: black;
+}
+body {
+  background: var(--unitColor);
+}
+h1 {
+  --titleColor: yellowgreen;
+  color: var(--titleColor);
+}

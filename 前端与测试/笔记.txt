@@ -1,0 +1,22 @@
+﻿1.单元测试jestjs(react推出)
+https://jestjs.io/docs/zh-Hans/getting-started.html
+
+2.第一个错误 jasmine-core 出错
+npm install karma-jasmine  jasmine-core --save-dev
+
+3.第二个错误 phantomjs 出错
+npm install phantom --save
+npm install --save-dev karma-phantomjs-launcher
+
+4.nightwatch 大型项目 
+http://nightwatchjs.org/
+
+5.rize错误
+Downloading Chromium r609904 - 82.7 Mb [====================] 0.2% 0.0s
+科学上网 yarn
+
+6.https://github.com/alibaba/f2etest
+    http://shaofan.org/f2etest/
+    http://shaofan.org/ui-recorder/
+7.https://f2etest.net/
+8.

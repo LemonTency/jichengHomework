@@ -15,6 +15,10 @@ async( await ctx.render('index.html'));
 
 while(1){
     //用throw 一个Error的方式
-    throw new Error;
+    throw new Error();
+}
+
+catch{
+    
 }
 
