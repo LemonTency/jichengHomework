@@ -1,0 +1,14 @@
+{
+  "name": "permance",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "wrk -t8 -c200 -d60s http://127.0.0.1:9000"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "memeye": "^1.0.3"
+  }
+}

@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>CSS渲染性能优化</title>
     <style>
-        .container{
+        .container {
             position: relative;
             min-height: 400px;
         }
 
-        .ball{
+        .ball {
             position: absolute;
             top: 0;
             left: 0;
@@ -21,42 +22,53 @@
             border-radius: 50%;
             box-shadow: 0 0 5px rgba(245, 172, 172, 0.75)
         }
-        .ball-running{
+
+        .ball-running {
             animation: run-around 4s infinite;
         }
+
         @keyframes run-around {
-            /* 0%{
+            /* 0% {
                 top: 0;
                 left: 0;
             }
-            25%{
+
+            25% {
                 top: 0;
                 left: 200px;
             }
-            50%{
+
+            50% {
                 top: 200px;
                 left: 200px;
             }
-            75%{
+
+            75% {
                 top: 200px;
                 left: 0;
             } */
-            0%{
+
+
+            0% {
                 transform: translate(0)
             }
-            25%{
-                transform: translate(200px,0)
+
+            25% {
+                transform: translate(200px, 0)
             }
-            50%{
-                transform: translate(200px,200px)
+
+            50% {
+                transform: translate(200px, 200px)
             }
-            75%{
-                transform: translate(0,200px)
+
+            75% {
+                transform: translate(0, 200px)
             }
-            
+
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="ball" id="ball">
@@ -67,7 +79,8 @@
         var ball = document.getElementById('ball');
         ball.classList.add('ball');
         ball.classList.add('ball-running');
-        
-    </script>       
+
+    </script>
 </body>
+
 </html>
